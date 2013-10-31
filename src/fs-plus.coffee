@@ -4,7 +4,9 @@ path = require 'path'
 
 _ = require 'underscore-plus'
 async = require 'async'
+CSON = null # Lazily require
 mkdirp = require 'mkdirp'
+plist = null # Lazily require
 rimraf = require 'rimraf'
 
 # Public: Useful extensions to node's built-in fs module
@@ -403,7 +405,7 @@ fsExtensions =
   # Public: Reads and returns CSON, JSON or Plist files and returns the
   # corresponding Object.
   readObjectSync: (objectPath) ->
-    CSON = require 'season'
+    CSON ?= require 'season'
     if CSON.isObjectPath(objectPath)
       CSON.readFileSync(objectPath)
     else
@@ -412,7 +414,7 @@ fsExtensions =
   # Public: Reads and returns CSON, JSON or Plist files and calls the specified
   # callback with the corresponding Object.
   readObject: (objectPath, done) ->
-    CSON = require 'season'
+    CSON ?= require 'season'
     if CSON.isObjectPath(objectPath)
       CSON.readFile(objectPath, done)
     else
@@ -420,12 +422,12 @@ fsExtensions =
 
   # Private: Used by readObjectSync.
   readPlistSync: (plistPath) ->
-    plist = require 'plist'
+    plist ?= require 'plist'
     plist.parseStringSync(@read(plistPath))
 
   # Private: Used by readObject.
   readPlist: (plistPath, done) ->
-    plist = require 'plist'
+    plist ?= require 'plist'
     fs.readFile plistPath, 'utf8', (error, contents) ->
       if error?
         done(error)
