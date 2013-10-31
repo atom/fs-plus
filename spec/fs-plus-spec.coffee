@@ -156,6 +156,6 @@ describe "fs", ->
       expect(fs.getSizeSync()).toBe -1
       expect(fs.getSizeSync('')).toBe -1
       expect(fs.getSizeSync(null)).toBe -1
-      expect(fs.getSizeSync(fixturesDir)).toBe 238
+      expect(fs.getSizeSync(fixturesDir)).toBeGreaterThan 0
       expect(fs.getSizeSync(path.join(fixturesDir, 'sample.js'))).toBe 408
       expect(fs.getSizeSync(path.join(fixturesDir, 'does.not.exist'))).toBe -1
