@@ -169,11 +169,6 @@ fsExtensions =
   removeSync: (pathToRemove) ->
     rimraf.sync(pathToRemove)
 
-  # Public: Open, read, and close a file, returning the file's contents
-  # synchronously.
-  readSync: (filePath) ->
-    fs.readFileSync(filePath, 'utf8')
-
   # Public: Open, write, flush, and close a file, writing the given content
   # synchronously.
   #

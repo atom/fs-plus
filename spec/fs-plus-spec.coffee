@@ -5,13 +5,6 @@ fs = require '../src/fs-plus'
 describe "fs", ->
   fixturesDir = path.join(__dirname, 'fixtures')
 
-  describe ".readSync(path)", ->
-    it "return contents of file", ->
-      expect(fs.readSync(require.resolve("./fixtures/sample.txt"))).toBe "Some text.\n"
-
-    it "does not through an exception when the path is a binary file", ->
-      expect(-> fs.readSync(require.resolve("./fixtures/binary-file.png"))).not.toThrow()
-
   describe ".isFileSync(path)", ->
     it "returns true with a file path", ->
       expect(fs.isFileSync(path.join(fixturesDir,  'sample.js'))).toBe true
