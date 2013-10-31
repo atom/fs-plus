@@ -11,5 +11,5 @@ npm install fs-plus
 ```
 
 ```coffee
-fs = require 'fs-plust'
+fs = require 'fs-plus'
 ```
