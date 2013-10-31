@@ -150,3 +150,12 @@ describe "fs", ->
       expect(fs.absolute('~')).toBe fs.realpathSync(homeDir)
       expect(fs.absolute(path.join('~', 'does', 'not', 'exist'))).toBe path.join(homeDir, 'does', 'not', 'exist')
       expect(fs.absolute('~test')).toBe '~test'
+
+  describe ".getSizeSync(pathToCheck)", ->
+    it "returns the size of the file at the path", ->
+      expect(fs.getSizeSync()).toBe -1
+      expect(fs.getSizeSync('')).toBe -1
+      expect(fs.getSizeSync(null)).toBe -1
+      expect(fs.getSizeSync(fixturesDir)).toBe 238
+      expect(fs.getSizeSync(path.join(fixturesDir, 'sample.js'))).toBe 408
+      expect(fs.getSizeSync(path.join(fixturesDir, 'does.not.exist'))).toBe -1

@@ -101,6 +101,13 @@ fsExtensions =
     else
       false
 
+  # Public: Returns the size of the specified path.
+  getSizeSync: (pathToCheck) ->
+    if pathToCheck?.length > 0
+      statSyncNoException(pathToCheck).size ? -1
+    else
+      -1
+
   # Public: Returns an Array with the paths of the files and directories
   # contained within the directory path. It is not recursive.
   #
