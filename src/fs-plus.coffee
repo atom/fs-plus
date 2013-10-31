@@ -173,9 +173,9 @@ fsExtensions =
   # synchronously.
   #
   # It also creates the necessary parent directories.
-  writeSync: (filePath, content) ->
+  writeFileSync: (filePath, content, options) ->
     mkdirp.sync(path.dirname(filePath))
-    fs.writeFileSync(filePath, content)
+    fs.writeFileSync(filePath, content, options)
 
   # Public: Open, write, flush, and close a file, writing the given content
   # asynchronously.
