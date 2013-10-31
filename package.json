@@ -15,6 +15,12 @@
     "url": "https://github.com/atom/fs-plus/issues"
   },
   "homepage": "http://atom.github.io/fs-plus",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/atom/fs-plust/raw/master/LICENSE.md"
+    }
+  ],
   "keywords": [
     "fs",
     "filesystem"
