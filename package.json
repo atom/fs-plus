@@ -1,5 +1,5 @@
 {
-  "name": "fs-plust",
+  "name": "fs-plus",
   "version": "0.1.0",
   "description": "node's fs with more helpers",
   "main": "./lib/fs-plus.js",
