@@ -5,12 +5,12 @@ fs = require '../src/fs-plus'
 describe "fs", ->
   fixturesDir = path.join(__dirname, 'fixtures')
 
-  describe ".read(path)", ->
+  describe ".readSync(path)", ->
     it "return contents of file", ->
-      expect(fs.read(require.resolve("./fixtures/sample.txt"))).toBe "Some text.\n"
+      expect(fs.readSync(require.resolve("./fixtures/sample.txt"))).toBe "Some text.\n"
 
     it "does not through an exception when the path is a binary file", ->
-      expect(-> fs.read(require.resolve("./fixtures/binary-file.png"))).not.toThrow()
+      expect(-> fs.readSync(require.resolve("./fixtures/binary-file.png"))).not.toThrow()
 
   describe ".isFileSync(path)", ->
     it "returns true with a file path", ->
@@ -23,16 +23,16 @@ describe "fs", ->
       expect(fs.isFileSync(path.join(fixturesDir, 'non-existent'))).toBe false
       expect(fs.isFileSync(null)).toBe false
 
-  describe ".exists(path)", ->
+  describe ".existsSync(path)", ->
     it "returns true when path exsits", ->
-      expect(fs.exists(fixturesDir)).toBe true
+      expect(fs.existsSync(fixturesDir)).toBe true
 
     it "returns false when path doesn't exsit", ->
-      expect(fs.exists(path.join(fixturesDir, "-nope-does-not-exist"))).toBe false
-      expect(fs.exists("")).toBe false
-      expect(fs.exists(null)).toBe false
+      expect(fs.existsSync(path.join(fixturesDir, "-nope-does-not-exist"))).toBe false
+      expect(fs.existsSync("")).toBe false
+      expect(fs.existsSync(null)).toBe false
 
-  describe ".makeTree(path)", ->
+  describe ".makeTreeSync(path)", ->
     aPath = path.join(temp.dir, 'a')
 
     beforeEach ->
@@ -40,8 +40,8 @@ describe "fs", ->
 
     it "creates all directories in path including any missing parent directories", ->
       abcPath = path.join(aPath, 'b', 'c')
-      fs.makeTree(abcPath)
-      expect(fs.exists(abcPath)).toBeTruthy()
+      fs.makeTreeSync(abcPath)
+      expect(fs.existsSync(abcPath)).toBeTruthy()
 
   describe ".traverseTreeSync(path, onFile, onDirectory)", ->
     it "calls fn for every path in the tree at the given path", ->

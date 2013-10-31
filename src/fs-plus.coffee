@@ -60,8 +60,7 @@ fsExtensions =
       pathToCheck[0] is '/' # /usr style
 
   # Public: Returns true if a file or folder at the specified path exists.
-  exists: (pathToCheck) ->
-    # TODO: rename to existsSync
+  existsSync: (pathToCheck) ->
     pathToCheck? and statSyncNoException(pathToCheck) isnt false
 
   # Public: Returns true if the given path exists and is a directory.
@@ -163,19 +162,16 @@ fsExtensions =
     paths
 
   # Public: Moves the file or directory to the target synchronously.
-  move: (source, target) ->
-    # TODO: This should be renamed to moveSync
+  moveSync: (source, target) ->
     fs.renameSync(source, target)
 
   # Public: Removes the file or directory at the given path synchronously.
-  remove: (pathToRemove) ->
-    # TODO: This should be renamed to removeSync
+  removeSync: (pathToRemove) ->
     rimraf.sync(pathToRemove)
 
   # Public: Open, read, and close a file, returning the file's contents
   # synchronously.
-  read: (filePath) ->
-    # TODO: This should be renamed to readSync
+  readSync: (filePath) ->
     fs.readFileSync(filePath, 'utf8')
 
   # Public: Open, write, flush, and close a file, writing the given content
@@ -221,9 +217,8 @@ fsExtensions =
 
   # Public: Create a directory at the specified path including any missing
   # parent directories synchronously.
-  makeTree: (directoryPath) ->
-    # TODO: rename to makeTreeSync
-    mkdirp.sync(directoryPath) if directoryPath and not @exists(directoryPath)
+  makeTreeSync: (directoryPath) ->
+    mkdirp.sync(directoryPath) if directoryPath and not @existsSync(directoryPath)
 
   # Public: Recursively walk the given path and execute the given functions
   # synchronously.
@@ -322,7 +317,7 @@ fsExtensions =
       if extensions and resolvedPath = @resolveExtension(pathToResolve, extensions)
         return resolvedPath
       else
-        return pathToResolve if @exists(pathToResolve)
+        return pathToResolve if @existsSync(pathToResolve)
 
     for loadPath in loadPaths
       candidatePath = path.join(loadPath, pathToResolve)
@@ -330,7 +325,7 @@ fsExtensions =
         if resolvedPath = @resolveExtension(candidatePath, extensions)
           return resolvedPath
       else
-        return @absolute(candidatePath) if @exists(candidatePath)
+        return @absolute(candidatePath) if @existsSync(candidatePath)
     undefined
 
   # Deprecated:
@@ -352,10 +347,10 @@ fsExtensions =
   resolveExtension: (pathToResolve, extensions) ->
     for extension in extensions
       if extension == ""
-        return @absolute(pathToResolve) if @exists(pathToResolve)
+        return @absolute(pathToResolve) if @existsSync(pathToResolve)
       else
         pathWithExtension = pathToResolve + "." + extension.replace(/^\./, "")
-        return @absolute(pathWithExtension) if @exists(pathWithExtension)
+        return @absolute(pathWithExtension) if @existsSync(pathWithExtension)
     undefined
 
   # Public: Returns true for extensions associated with compressed files.
