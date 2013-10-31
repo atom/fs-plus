@@ -1,0 +1,37 @@
+{
+  "name": "fs-plust",
+  "version": "0.1.0",
+  "description": "node's fs with more helpers",
+  "main": "./lib/fs-plus.js",
+  "scripts": {
+    "prepublish": "grunt prepublish",
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atom/fs-plus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atom/fs-plus/issues"
+  },
+  "homepage": "http://atom.github.io/fs-plus",
+  "keywords": [
+    "fs",
+    "filesystem"
+  ],
+  "devDependencies": {
+    "jasmine-focused": "~0.15.0",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-cli": "~0.1.8",
+    "grunt": "~0.4.1",
+    "grunt-shell": "~0.2.2",
+    "grunt-coffeelint": "0.0.6",
+    "temp": "~0.6.0"
+  },
+  "dependencies": {
+    "underscore-plus": "~0.2.0",
+    "mkdirp": "~0.3.5",
+    "rimraf": "~2.2.2",
+    "async": "~0.2.9"
+  }
+}
