@@ -181,12 +181,12 @@ fsExtensions =
   # asynchronously.
   #
   # It also creates the necessary parent directories.
-  write: (filePath, content, callback) ->
+  writeFile: (filePath, content, options, callback) ->
     mkdirp path.dirname(filePath), (error) ->
       if error?
         callback?(error)
       else
-        fs.writeFile(filePath, content, callback)
+        fs.writeFile(filePath, content, options, callback)
 
   # Public: Copies the given path asynchronously.
   copy: (sourcePath, destinationPath, done) ->
