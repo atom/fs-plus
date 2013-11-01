@@ -421,7 +421,7 @@ fsExtensions =
   # Private: Used by readObjectSync.
   readPlistSync: (plistPath) ->
     plist ?= require 'plist'
-    plist.parseStringSync(@read(plistPath))
+    plist.parseStringSync(fs.readFileSync(plistPath, 'utf8'))
 
   # Private: Used by readObject.
   readPlist: (plistPath, done) ->
