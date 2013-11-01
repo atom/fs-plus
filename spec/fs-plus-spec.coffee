@@ -152,3 +152,29 @@ describe "fs", ->
       expect(fs.getSizeSync(fixturesDir)).toBeGreaterThan 0
       expect(fs.getSizeSync(path.join(fixturesDir, 'sample.js'))).toBe 408
       expect(fs.getSizeSync(path.join(fixturesDir, 'does.not.exist'))).toBe -1
+
+  describe ".writeFileSync(filePath)", ->
+    it "creates any missing parent directories", ->
+      directory = temp.mkdirSync('fs-plus-')
+      file = path.join(directory, 'a', 'b', 'c.txt')
+      expect(fs.existsSync(path.dirname(file))).toBeFalsy()
+
+      fs.writeFileSync(file, 'contents')
+      expect(fs.readFileSync(file, 'utf8')).toBe 'contents'
+      expect(fs.existsSync(path.dirname(file))).toBeTruthy()
+
+  describe ".writeFile(filePath)", ->
+    it "creates any missing parent directories", ->
+      directory = temp.mkdirSync('fs-plus-')
+      file = path.join(directory, 'a', 'b', 'c.txt')
+      expect(fs.existsSync(path.dirname(file))).toBeFalsy()
+
+      handler = jasmine.createSpy('writeFileHandler')
+      fs.writeFile(file, 'contents', handler)
+
+      waitsFor ->
+        handler.callCount is 1
+
+      runs ->
+        expect(fs.readFileSync(file, 'utf8')).toBe 'contents'
+        expect(fs.existsSync(path.dirname(file))).toBeTruthy()

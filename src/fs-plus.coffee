@@ -182,6 +182,7 @@ fsExtensions =
   #
   # It also creates the necessary parent directories.
   writeFile: (filePath, content, options, callback) ->
+    callback = _.last(arguments)
     mkdirp path.dirname(filePath), (error) ->
       if error?
         callback?(error)
