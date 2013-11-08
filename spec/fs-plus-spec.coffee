@@ -213,4 +213,3 @@ describe "fs", ->
       it "copies the file and folder", ->
         expect(fs.isFileSync(path.join(destination, 'a.txt'))).toBeTruthy()
         expect(fs.isDirectorySync(path.join(destination, 'b'))).toBeTruthy()
-
