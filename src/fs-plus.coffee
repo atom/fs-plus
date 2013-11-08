@@ -211,6 +211,19 @@ fsExtensions =
 
       sourceStream.pipe(destinationStream)
 
+  # Public: Copies the given path recursively and synchronously.
+  copySync: (sourcePath, destinationPath) ->
+    mkdirp.sync(destinationPath)
+    for source in fs.readdirSync(sourcePath)
+      sourceFilePath = path.join(sourcePath, source)
+      destinationFilePath = path.join(destinationPath, source)
+
+      if @isDirectorySync(sourceFilePath)
+        @copySync(sourceFilePath, destinationFilePath)
+      else
+        content = fs.readFileSync(sourceFilePath)
+        fs.writeFileSync(destinationFilePath, content)
+
   # Public: Create a directory at the specified path including any missing
   # parent directories synchronously.
   makeTreeSync: (directoryPath) ->

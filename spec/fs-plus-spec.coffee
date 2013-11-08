@@ -188,3 +188,29 @@ describe "fs", ->
 
     it "reads CSON files", ->
       expect(fs.readObjectSync(path.join(fixturesDir, 'test.cson')).key).toBe 'value'
+
+  describe ".copySync(sourcePath, destinationPath)", ->
+    [source, destination] = []
+
+    beforeEach ->
+      source = temp.mkdirSync('fs-plus-')
+      destination = temp.mkdirSync('fs-plus-')
+
+    describe "with just files", ->
+      beforeEach ->
+        fs.writeFileSync(path.join(source, 'a.txt'), 'a')
+        fs.copySync(source, destination)
+
+      it "copies the file", ->
+        expect(fs.isFileSync(path.join(destination, 'a.txt'))).toBeTruthy()
+
+    describe "with folders and files", ->
+      beforeEach ->
+        fs.writeFileSync(path.join(source, 'a.txt'), 'a')
+        fs.makeTreeSync(path.join(source, 'b'))
+        fs.copySync(source, destination)
+
+      it "copies the file and folder", ->
+        expect(fs.isFileSync(path.join(destination, 'a.txt'))).toBeTruthy()
+        expect(fs.isDirectorySync(path.join(destination, 'b'))).toBeTruthy()
+
