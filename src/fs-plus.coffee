@@ -92,6 +92,14 @@ fsExtensions =
     else
       false
 
+  # Public: Returns true if the specified path is a symbolic link.
+  isSymlinkSync: (symlinkPath) ->
+    return false unless symlinkPath?.length > 0
+    try
+      fs.lstatSync(symlinkPath).isSymbolicLink()
+    catch error
+      false
+
   # Public: Returns true if the specified path is executable.
   isExecutableSync: (pathToCheck) ->
     return false unless pathToCheck?.length > 0
