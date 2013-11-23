@@ -93,7 +93,7 @@ fsExtensions =
       false
 
   # Public: Returns true if the specified path is a symbolic link.
-  isSymlinkSync: (symlinkPath) ->
+  isSymbolicLinkSync: (symlinkPath) ->
     return false unless symlinkPath?.length > 0
     try
       fs.lstatSync(symlinkPath).isSymbolicLink()
