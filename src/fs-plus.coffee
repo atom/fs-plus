@@ -16,7 +16,7 @@ rimraf = require 'rimraf'
 # functions that we've found to be helpful.
 #
 # [fs]: http://nodejs.org/api/fs.html
-fsExtensions =
+fsPlus =
   getHomeDirectory: ->
     if process.platform is 'win32'
       process.env.USERPROFILE
@@ -35,7 +35,7 @@ fsExtensions =
   absolute: (relativePath) ->
     return null unless relativePath?
 
-    homeDir = @getHomeDirectory()
+    homeDir = fsPlus.getHomeDirectory()
 
     if relativePath is '~'
       relativePath = homeDir
@@ -124,9 +124,9 @@ fsExtensions =
   #   An array of extensions to filter the results by. If none are given, none
   #   are filtered (optional).
   listSync: (rootPath, extensions) ->
-    return [] unless @isDirectorySync(rootPath)
+    return [] unless fsPlus.isDirectorySync(rootPath)
     paths = fs.readdirSync(rootPath)
-    paths = @filterExtensions(paths, extensions) if extensions
+    paths = fsPlus.filterExtensions(paths, extensions) if extensions
     paths = paths.map (childPath) -> path.join(rootPath, childPath)
     paths
 
@@ -143,11 +143,11 @@ fsExtensions =
   list: (rootPath, rest...) ->
     extensions = rest.shift() if rest.length > 1
     done = rest.shift()
-    fs.readdir rootPath, (error, paths) =>
+    fs.readdir rootPath, (error, paths) ->
       if error?
         done(error)
       else
-        paths = @filterExtensions(paths, extensions) if extensions
+        paths = fsPlus.filterExtensions(paths, extensions) if extensions
         paths = paths.map (childPath) -> path.join(rootPath, childPath)
         done(null, paths)
 
@@ -158,7 +158,8 @@ fsExtensions =
         ext
       else
         '.' + ext.replace(/^\./, '')
-    paths.filter (pathToCheck) -> _.include(extensions, path.extname(pathToCheck))
+    paths.filter (pathToCheck) ->
+      _.include(extensions, path.extname(pathToCheck))
 
   # Deprecated: No one currently uses this.
   listTreeSync: (rootPath) ->
@@ -166,7 +167,7 @@ fsExtensions =
     onPath = (childPath) ->
       paths.push(childPath)
       true
-    @traverseTreeSync(rootPath, onPath, onPath)
+    fsPlus.traverseTreeSync(rootPath, onPath, onPath)
     paths
 
   # Public: Moves the file or directory to the target synchronously.
@@ -226,8 +227,8 @@ fsExtensions =
       sourceFilePath = path.join(sourcePath, source)
       destinationFilePath = path.join(destinationPath, source)
 
-      if @isDirectorySync(sourceFilePath)
-        @copySync(sourceFilePath, destinationFilePath)
+      if fsPlus.isDirectorySync(sourceFilePath)
+        fsPlus.copySync(sourceFilePath, destinationFilePath)
       else
         content = fs.readFileSync(sourceFilePath)
         fs.writeFileSync(destinationFilePath, content)
@@ -235,7 +236,7 @@ fsExtensions =
   # Public: Create a directory at the specified path including any missing
   # parent directories synchronously.
   makeTreeSync: (directoryPath) ->
-    mkdirp.sync(directoryPath) if directoryPath and not @existsSync(directoryPath)
+    mkdirp.sync(directoryPath) unless fsPlus.existsSync(directoryPath)
 
   # Public: Recursively walk the given path and execute the given functions
   # synchronously.
@@ -249,7 +250,7 @@ fsExtensions =
   #   The function to execute on each directory, receives a single argument the
   #   absolute path (defaults to onFile)
   traverseTreeSync: (rootPath, onFile, onDirectory=onFile) ->
-    return unless @isDirectorySync(rootPath)
+    return unless fsPlus.isDirectorySync(rootPath)
 
     traverse = (directoryPath, onFile, onDirectory) ->
       for file in fs.readdirSync(directoryPath)
@@ -330,25 +331,25 @@ fsExtensions =
     pathToResolve = args.pop()
     loadPaths = args
 
-    if @isAbsolute(pathToResolve)
-      if extensions and resolvedPath = @resolveExtension(pathToResolve, extensions)
+    if fsPlus.isAbsolute(pathToResolve)
+      if extensions and resolvedPath = fsPlus.resolveExtension(pathToResolve, extensions)
         return resolvedPath
       else
-        return pathToResolve if @existsSync(pathToResolve)
+        return pathToResolve if fsPlus.existsSync(pathToResolve)
 
     for loadPath in loadPaths
       candidatePath = path.join(loadPath, pathToResolve)
       if extensions
-        if resolvedPath = @resolveExtension(candidatePath, extensions)
+        if resolvedPath = fsPlus.resolveExtension(candidatePath, extensions)
           return resolvedPath
       else
-        return @absolute(candidatePath) if @existsSync(candidatePath)
+        return fsPlus.absolute(candidatePath) if fsPlus.existsSync(candidatePath)
     undefined
 
   # Deprecated:
   resolveOnLoadPath: (args...) ->
     loadPaths = Module.globalPaths.concat(module.paths)
-    @resolve(loadPaths..., args...)
+    fsPlus.resolve(loadPaths..., args...)
 
   # Public: Finds the first file in the given path which matches the extension
   # in the order given.
@@ -364,10 +365,10 @@ fsExtensions =
   resolveExtension: (pathToResolve, extensions) ->
     for extension in extensions
       if extension == ""
-        return @absolute(pathToResolve) if @existsSync(pathToResolve)
+        return fsPlus.absolute(pathToResolve) if fsPlus.existsSync(pathToResolve)
       else
         pathWithExtension = pathToResolve + "." + extension.replace(/^\./, "")
-        return @absolute(pathWithExtension) if @existsSync(pathWithExtension)
+        return fsPlus.absolute(pathWithExtension) if fsPlus.existsSync(pathWithExtension)
     undefined
 
   # Public: Returns true for extensions associated with compressed files.
@@ -408,7 +409,7 @@ fsExtensions =
   isReadmePath: (readmePath) ->
     extension = path.extname(readmePath)
     base = path.basename(readmePath, extension).toLowerCase()
-    base is 'readme' and (extension is '' or @isMarkdownExtension(extension))
+    base is 'readme' and (extension is '' or fsPlus.isMarkdownExtension(extension))
 
   # Private: Used by isReadmePath.
   isMarkdownExtension: (ext) ->
@@ -428,7 +429,7 @@ fsExtensions =
     if CSON.isObjectPath(objectPath)
       CSON.readFileSync(objectPath)
     else
-      @readPlistSync(objectPath)
+      fsPlus.readPlistSync(objectPath)
 
   # Public: Reads and returns CSON, JSON or Plist files and calls the specified
   # callback with the corresponding Object.
@@ -437,7 +438,7 @@ fsExtensions =
     if CSON.isObjectPath(objectPath)
       CSON.readFile(objectPath, done)
     else
-      @readPlist(objectPath, done)
+      fsPlus.readPlist(objectPath, done)
 
   # Private: Used by readObjectSync.
   readPlistSync: (plistPath) ->
@@ -469,4 +470,4 @@ lstatSyncNoException ?= (args...) ->
   catch error
     false
 
-module.exports = _.extend({}, fs, fsExtensions)
+module.exports = _.extend({}, fs, fsPlus)
