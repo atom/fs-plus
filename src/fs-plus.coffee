@@ -61,7 +61,7 @@ fsPlus =
 
   # Public: Returns true if a file or folder at the specified path exists.
   existsSync: (pathToCheck) ->
-    pathToCheck? and statSyncNoException(pathToCheck) isnt false
+    pathToCheck?.length > 0 and statSyncNoException(pathToCheck) isnt false
 
   # Public: Returns true if the given path exists and is a directory.
   isDirectorySync: (directoryPath) ->
