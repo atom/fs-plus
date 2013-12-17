@@ -29,10 +29,10 @@ describe "fs", ->
       expect(fs.isSymbolicLinkSync(null)).toBe false
 
   describe ".existsSync(path)", ->
-    it "returns true when path exsits", ->
+    it "returns true when the path exists", ->
       expect(fs.existsSync(fixturesDir)).toBe true
 
-    it "returns false when path doesn't exsit", ->
+    it "returns false when the path doesn't exist", ->
       expect(fs.existsSync(path.join(fixturesDir, "-nope-does-not-exist"))).toBe false
       expect(fs.existsSync("")).toBe false
       expect(fs.existsSync(null)).toBe false
