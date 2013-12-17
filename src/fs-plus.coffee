@@ -95,9 +95,9 @@ fsExtensions =
   # Public: Returns true if the specified path is a symbolic link.
   isSymbolicLinkSync: (symlinkPath) ->
     return false unless symlinkPath?.length > 0
-    try
-      fs.lstatSync(symlinkPath).isSymbolicLink()
-    catch error
+    if stat = lstatSyncNoException(symlinkPath)
+      stat.isSymbolicLink()
+    else
       false
 
   # Public: Returns true if the specified path is executable.
@@ -456,10 +456,16 @@ fsExtensions =
         catch parseError
           done(parseError)
 
-{statSyncNoException} = fs
+{statSyncNoException, lstatSyncNoException} = fs
 statSyncNoException ?= (args...) ->
   try
     fs.statSync(args...)
+  catch error
+    false
+
+lstatSyncNoException ?= (args...) ->
+  try
+    fs.lstatSync(args...)
   catch error
     false
 
