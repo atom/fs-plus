@@ -16,7 +16,7 @@ describe "fs", ->
       expect(fs.isFileSync(path.join(fixturesDir, 'non-existent'))).toBe false
       expect(fs.isFileSync(null)).toBe false
 
-  describe ".isSymbolicLink(path)", ->
+  describe ".isSymbolicLinkSync(path)", ->
     it "returns true with a symbolic link path", ->
       expect(fs.isSymbolicLinkSync(path.join(fixturesDir,  'link-to-sample.js'))).toBe true
 
