@@ -100,6 +100,14 @@ fsPlus =
     else
       false
 
+  # Public: Calls back with true if the specified path is a symbolic link.
+  isSymbolicLink: (symlinkPath, callback) ->
+    if symlinkPath?.length > 0
+      fs.lstat symlinkPath, (error, stat) ->
+        callback?(stat? and stat.isSymbolicLink())
+    else
+      process.nextTick -> callback?(false)
+
   # Public: Returns true if the specified path is executable.
   isExecutableSync: (pathToCheck) ->
     return false unless pathToCheck?.length > 0

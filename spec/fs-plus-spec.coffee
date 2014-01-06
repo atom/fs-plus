@@ -28,6 +28,40 @@ describe "fs", ->
       expect(fs.isSymbolicLinkSync('')).toBe false
       expect(fs.isSymbolicLinkSync(null)).toBe false
 
+  describe ".isSymbolicLink(path, callback)", ->
+    it "calls back with true for a symbolic link path", ->
+      callback = jasmine.createSpy('isSymbolicLink')
+      fs.isSymbolicLink(path.join(fixturesDir,  'link-to-sample.js'), callback)
+      waitsFor -> callback.callCount is 1
+      runs -> expect(callback.mostRecentCall.args[0]).toBe true
+
+    it "calls back with false for a file path", ->
+      callback = jasmine.createSpy('isSymbolicLink')
+      fs.isSymbolicLink(path.join(fixturesDir,  'sample.js'), callback)
+      waitsFor -> callback.callCount is 1
+      runs -> expect(callback.mostRecentCall.args[0]).toBe false
+
+    it "calls back with false for a non-existent path", ->
+      callback = jasmine.createSpy('isSymbolicLink')
+
+      fs.isSymbolicLink(path.join(fixturesDir,  'non-existent'), callback)
+      waitsFor -> callback.callCount is 1
+      runs ->
+        expect(callback.mostRecentCall.args[0]).toBe false
+
+        callback.reset()
+        fs.isSymbolicLink('', callback)
+
+      waitsFor -> callback.callCount is 1
+      runs ->
+        expect(callback.mostRecentCall.args[0]).toBe false
+
+        callback.reset()
+        fs.isSymbolicLink(null, callback)
+
+      waitsFor -> callback.callCount is 1
+      runs -> expect(callback.mostRecentCall.args[0]).toBe false
+
   describe ".existsSync(path)", ->
     it "returns true when the path exists", ->
       expect(fs.existsSync(fixturesDir)).toBe true
