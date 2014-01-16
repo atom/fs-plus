@@ -226,9 +226,6 @@ describe "fs", ->
         expect(fs.existsSync(path.dirname(file))).toBeTruthy()
 
   describe ".readObjectSync(objectPath)", ->
-    it "reads plist files", ->
-      expect(fs.readObjectSync(path.join(fixturesDir, 'test.plist')).name).toBe 'Dawn'
-
     it "reads JSON files", ->
       expect(fs.readObjectSync(path.join(fixturesDir, 'test.json')).key).toBe 'value'
 

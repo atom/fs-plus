@@ -6,7 +6,6 @@ _ = require 'underscore-plus'
 async = require 'async'
 CSON = null # Lazily require
 mkdirp = require 'mkdirp'
-plist = null # Lazily require
 rimraf = require 'rimraf'
 
 # Public: Useful extensions to node's built-in fs module
@@ -430,40 +429,17 @@ fsPlus =
       '.ron'
     ], ext, true) >= 0
 
-  # Public: Reads and returns CSON, JSON or Plist files and returns the
+  # Public: Reads and returns CSON or JSON files and returns the
   # corresponding Object.
   readObjectSync: (objectPath) ->
     CSON ?= require 'season'
-    if CSON.isObjectPath(objectPath)
-      CSON.readFileSync(objectPath)
-    else
-      fsPlus.readPlistSync(objectPath)
+    CSON.readFileSync(objectPath)
 
-  # Public: Reads and returns CSON, JSON or Plist files and calls the specified
+  # Public: Reads and returns CSON or JSON files and calls the specified
   # callback with the corresponding Object.
   readObject: (objectPath, done) ->
     CSON ?= require 'season'
-    if CSON.isObjectPath(objectPath)
-      CSON.readFile(objectPath, done)
-    else
-      fsPlus.readPlist(objectPath, done)
-
-  # Private: Used by readObjectSync.
-  readPlistSync: (plistPath) ->
-    plist ?= require 'plist'
-    plist.parseStringSync(fs.readFileSync(plistPath, 'utf8'))
-
-  # Private: Used by readObject.
-  readPlist: (plistPath, done) ->
-    plist ?= require 'plist'
-    fs.readFile plistPath, 'utf8', (error, contents) ->
-      if error?
-        done(error)
-      else
-        try
-          done(null, plist.parseStringSync(contents))
-        catch parseError
-          done(parseError)
+    CSON.readFile(objectPath, done)
 
 {statSyncNoException, lstatSyncNoException} = fs
 statSyncNoException ?= (args...) ->
