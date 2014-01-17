@@ -392,6 +392,7 @@ fsPlus =
   isImageExtension: (ext) ->
     _.indexOf([
       '.gif'
+      '.ico'
       '.jpeg'
       '.jpg'
       '.png'
