@@ -24,12 +24,12 @@ fsPlus =
   # Public: Make the given path absolute by resolving it against the current
   # working directory.
   #
-  # * relativePath:
-  #   The String containing the relative path. If the path is prefixed with
-  #   '~', it will be expanded to the current user's home directory.
+  # relativePath - The {String} containing the relative path. If the path is
+  #                prefixed with '~', it will be expanded to the current user's
+  #                home directory.
   #
-  # Returns the absolute path or the relative path if it's unable to determine
-  # it's realpath.
+  # Returns the {String} absolute path or the relative path if it's unable to
+  # determine its realpath.
   absolute: (relativePath) ->
     return null unless relativePath?
 
@@ -47,10 +47,9 @@ fsPlus =
 
   # Public: Is the given path absolute?
   #
-  # * pathToCheck:
-  #   The relative or absolute path to check.
+  # pathToCheck - The relative or absolute {String} path to check.
   #
-  # Returns true if the path is absolute, false otherwise.
+  # Returns a {Boolean}, true if the path is absolute, false otherwise.
   isAbsolute: (pathToCheck='') ->
     if process.platform is 'win32'
       pathToCheck[1] is ':' # C:\ style
@@ -124,11 +123,9 @@ fsPlus =
   # Public: Returns an Array with the paths of the files and directories
   # contained within the directory path. It is not recursive.
   #
-  # * rootPath:
-  #   The absolute path to the directory to list.
-  # * extensions:
-  #   An array of extensions to filter the results by. If none are given, none
-  #   are filtered (optional).
+  # rootPath - The absolute {String} path to the directory to list.
+  # extensions - An {Array} of extensions to filter the results by. If none are
+  #              given, none are filtered (optional).
   listSync: (rootPath, extensions) ->
     return [] unless fsPlus.isDirectorySync(rootPath)
     paths = fs.readdirSync(rootPath)
@@ -139,13 +136,10 @@ fsPlus =
   # Public: Asynchronously lists the files and directories in the given path.
   # The listing is not recursive.
   #
-  # * rootPath:
-  #   The absolute path to the directory to list.
-  # * extensions:
-  #   An array of extensions to filter the results by. If none are given, none
-  #   are filtered (optional)
-  # * callback:
-  #   The function to call
+  # rootPath - The absolute {String} path to the directory to list.
+  # extensions - An {Array} of extensions to filter the results by. If none are
+  #              given, none are filtered (optional).
+  # callback - The {Function} to call.
   list: (rootPath, rest...) ->
     extensions = rest.shift() if rest.length > 1
     done = rest.shift()
@@ -157,7 +151,7 @@ fsPlus =
         paths = paths.map (childPath) -> path.join(rootPath, childPath)
         done(null, paths)
 
-  # Private: Returns only the paths which end with one of the given extensions.
+  # Returns only the paths which end with one of the given extensions.
   filterExtensions: (paths, extensions) ->
     extensions = extensions.map (ext) ->
       if ext is ''
@@ -167,7 +161,11 @@ fsPlus =
     paths.filter (pathToCheck) ->
       _.include(extensions, path.extname(pathToCheck))
 
-  # Deprecated: No one currently uses this.
+  # Public: Get all paths under the given path.
+  #
+  # rootPath - The {String} path to start at.
+  #
+  # Return an {Array} of {String}s under the given path.
   listTreeSync: (rootPath) ->
     paths = []
     onPath = (childPath) ->
@@ -247,14 +245,11 @@ fsPlus =
   # Public: Recursively walk the given path and execute the given functions
   # synchronously.
   #
-  # * rootPath:
-  #   The String containing the directory to recurse into.
-  # * onFile:
-  #   The function to execute on each file, receives a single argument the
-  #   absolute path.
-  # * onDirectory:
-  #   The function to execute on each directory, receives a single argument the
-  #   absolute path (defaults to onFile)
+  # rootPath - The {String} containing the directory to recurse into.
+  # onFile - The {Function} to execute on each file, receives a single argument
+  #          the absolute path.
+  # onDirectory - The {Function} to execute on each directory, receives a single
+  #               argument the absolute path (defaults to onFile).
   traverseTreeSync: (rootPath, onFile, onDirectory=onFile) ->
     return unless fsPlus.isDirectorySync(rootPath)
 
@@ -275,14 +270,11 @@ fsPlus =
   # Public: Recursively walk the given path and execute the given functions
   # asynchronously.
   #
-  # * rootPath:
-  #   The String containing the directory to recurse into.
-  # * onFile:
-  #   The function to execute on each file, receives a single argument the
-  #   absolute path.
-  # * onDirectory:
-  #   The function to execute on each directory, receives a single argument the
-  #   absolute path (defaults to onFile)
+  # rootPath - The {String} containing the directory to recurse into.
+  # onFile - The {Function} to execute on each file, receives a single argument
+  #          the absolute path.
+  # onDirectory - The {Function} to execute on each directory, receives a single
+  #               argument the absolute path (defaults to onFile).
   traverseTree: (rootPath, onFile, onDirectory, onDone) ->
     fs.readdir rootPath, (error, files) ->
       if error
@@ -312,8 +304,7 @@ fsPlus =
 
   # Public: Hashes the contents of the given file.
   #
-  # * pathToDigest:
-  #   The String containing the absolute path.
+  # pathToDigest - The {String} containing the absolute path.
   #
   # Returns a String containing the MD5 hexadecimal hash.
   md5ForPath: (pathToDigest) ->
@@ -322,13 +313,11 @@ fsPlus =
 
   # Public: Finds a relative path among the given array of paths.
   #
-  # * loadPaths:
-  #   An Array of absolute and relative paths to search.
-  # * pathToResolve:
-  #   The string containing the path to resolve.
-  # * extensions:
-  #   An array of extensions to pass to {resolveExtensions} in which case
-  #   pathToResolve should not contain an extension (optional).
+  # loadPaths - An {Array} of absolute and relative paths to search.
+  # pathToResolve - The {String} containing the path to resolve.
+  # extensions - An {Array} of extensions to pass to {resolveExtensions} in
+  #              which case pathToResolve should not contain an extension
+  #              (optional).
   #
   # Returns the absolute path of the file to be resolved if it's found and
   # undefined otherwise.
@@ -352,7 +341,8 @@ fsPlus =
         return fsPlus.absolute(candidatePath) if fsPlus.existsSync(candidatePath)
     undefined
 
-  # Deprecated:
+  # Public: Like {.resolve} but uses node's modules paths as the load paths to
+  # search.
   resolveOnLoadPath: (args...) ->
     loadPaths = Module.globalPaths.concat(module.paths)
     fsPlus.resolve(loadPaths..., args...)
@@ -360,11 +350,9 @@ fsPlus =
   # Public: Finds the first file in the given path which matches the extension
   # in the order given.
   #
-  # * pathToResolve:
-  #   The String containing relative or absolute path of the file in question
-  #   without the extension or '.'.
-  # * extensions:
-  #   The ordered Array of extensions to try.
+  # pathToResolve - The {String} containing relative or absolute path of the
+  #                 file in question without the extension or '.'.
+  # extensions - The ordered {Array} of extensions to try.
   #
   # Returns the absolute path of the file if it exists with any of the given
   # extensions, otherwise it's undefined.
@@ -418,7 +406,7 @@ fsPlus =
     base = path.basename(readmePath, extension).toLowerCase()
     base is 'readme' and (extension is '' or fsPlus.isMarkdownExtension(extension))
 
-  # Private: Used by isReadmePath.
+  # Public: Returns true for extensions associated with Markdown files.
   isMarkdownExtension: (ext) ->
     _.indexOf([
       '.markdown'
