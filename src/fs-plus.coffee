@@ -4,7 +4,6 @@ path = require 'path'
 
 _ = require 'underscore-plus'
 async = require 'async'
-CSON = null # Lazily require
 mkdirp = require 'mkdirp'
 rimraf = require 'rimraf'
 
@@ -429,18 +428,6 @@ fsPlus =
       '.mkdown'
       '.ron'
     ], ext, true) >= 0
-
-  # Public: Reads and returns CSON or JSON files and returns the
-  # corresponding Object.
-  readObjectSync: (objectPath) ->
-    CSON ?= require 'season'
-    CSON.readFileSync(objectPath)
-
-  # Public: Reads and returns CSON or JSON files and calls the specified
-  # callback with the corresponding Object.
-  readObject: (objectPath, done) ->
-    CSON ?= require 'season'
-    CSON.readFile(objectPath, done)
 
 {statSyncNoException, lstatSyncNoException} = fs
 statSyncNoException ?= (args...) ->

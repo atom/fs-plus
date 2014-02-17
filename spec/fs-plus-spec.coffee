@@ -225,13 +225,6 @@ describe "fs", ->
         expect(fs.readFileSync(file, 'utf8')).toBe 'contents'
         expect(fs.existsSync(path.dirname(file))).toBeTruthy()
 
-  describe ".readObjectSync(objectPath)", ->
-    it "reads JSON files", ->
-      expect(fs.readObjectSync(path.join(fixturesDir, 'test.json')).key).toBe 'value'
-
-    it "reads CSON files", ->
-      expect(fs.readObjectSync(path.join(fixturesDir, 'test.cson')).key).toBe 'value'
-
   describe ".copySync(sourcePath, destinationPath)", ->
     [source, destination] = []
 
