@@ -226,8 +226,11 @@ fsPlus =
 
   # Public: Copies the given path recursively and synchronously.
   copySync: (sourcePath, destinationPath) ->
+    # We need to save the sources before creaing the new directory to avoid
+    # infinitely creating copies of the directory when copying inside itself
+    sources = fs.readdirSync(sourcePath)
     mkdirp.sync(destinationPath)
-    for source in fs.readdirSync(sourcePath)
+    for source in sources
       sourceFilePath = path.join(sourcePath, source)
       destinationFilePath = path.join(destinationPath, source)
 

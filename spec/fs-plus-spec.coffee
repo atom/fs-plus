@@ -249,3 +249,16 @@ describe "fs", ->
       it "copies the file and folder", ->
         expect(fs.isFileSync(path.join(destination, 'a.txt'))).toBeTruthy()
         expect(fs.isDirectorySync(path.join(destination, 'b'))).toBeTruthy()
+
+      describe "source is copied into itself", ->
+        beforeEach ->
+          source = temp.mkdirSync('fs-plus-')
+          destination = source
+          fs.writeFileSync(path.join(source, 'a.txt'), 'a')
+          fs.makeTreeSync(path.join(source, 'b'))
+          fs.copySync(source, path.join(destination, path.basename(source)))
+
+        it "copies the directory once", ->
+          expect(fs.isDirectorySync(path.join(destination, path.basename(source)))).toBeTruthy()
+          expect(fs.isDirectorySync(path.join(destination, path.basename(source), 'b'))).toBeTruthy()
+          expect(fs.isDirectorySync(path.join(destination, path.basename(source), path.basename(source)))).toBeFalsy()
