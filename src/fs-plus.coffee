@@ -399,10 +399,10 @@ fsPlus =
       '.DS_Store'
       '.a'
       '.o'
-      '.so'
-      '.woff'
       '.pyc'
       '.pyo'
+      '.so'
+      '.woff'
     ], ext, true) >= 0
 
   # Public: Returns true for files named similarily to 'README'
