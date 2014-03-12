@@ -399,6 +399,8 @@ fsPlus =
       '.DS_Store'
       '.a'
       '.o'
+      '.pyc'
+      '.pyo'
       '.so'
       '.woff'
     ], ext, true) >= 0
