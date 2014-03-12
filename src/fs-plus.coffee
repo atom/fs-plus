@@ -401,6 +401,8 @@ fsPlus =
       '.o'
       '.so'
       '.woff'
+      '.pyc'
+      '.pyo'
     ], ext, true) >= 0
 
   # Public: Returns true for files named similarily to 'README'
