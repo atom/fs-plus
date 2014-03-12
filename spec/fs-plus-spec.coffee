@@ -158,6 +158,7 @@ describe "fs", ->
         path.join(fixturesDir, 'css.css')
         path.join(fixturesDir, 'link-to-sample.js')
         path.join(fixturesDir, 'sample.js')
+        path.join(fixturesDir, 'Sample.markdown')
         path.join(fixturesDir, 'sample.txt')
         path.join(fixturesDir, 'test.cson')
         path.join(fixturesDir, 'test.json')
