@@ -131,7 +131,10 @@ fsPlus =
     paths = fs.readdirSync(rootPath)
     paths = fsPlus.filterExtensions(paths, extensions) if extensions
     paths = paths.map (childPath) -> path.join(rootPath, childPath)
-    paths
+    paths.sort (a, b) ->
+      return -1 if a.toLowerCase() < b.toLowerCase()
+      return 1 if a.toLowerCase() > b.toLowerCase()
+      0
 
   # Public: Asynchronously lists the files and directories in the given path.
   # The listing is not recursive.

@@ -150,6 +150,21 @@ describe "fs", ->
       expect(paths).toContain path.join(fixturesDir, 'coffee.coffee')
       expect(listedPath).toMatch /(css|coffee)$/ for listedPath in paths
 
+    it "returns alphabetically sorted paths (lowercase first)", ->
+      paths = fs.listSync(fixturesDir)
+      sortedPaths = [
+        path.join(fixturesDir, 'binary-file.png')
+        path.join(fixturesDir, 'coffee.coffee')
+        path.join(fixturesDir, 'css.css')
+        path.join(fixturesDir, 'link-to-sample.js')
+        path.join(fixturesDir, 'sample.js')
+        path.join(fixturesDir, 'sample.txt')
+        path.join(fixturesDir, 'test.cson')
+        path.join(fixturesDir, 'test.json')
+        path.join(fixturesDir, 'Xample.md')
+      ]
+      expect(sortedPaths).toEqual paths
+
   describe ".list(path, [extensions,] callback)", ->
     paths = null
 
