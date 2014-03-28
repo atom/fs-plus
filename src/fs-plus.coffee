@@ -422,6 +422,9 @@ fsPlus =
       '.ron'
     ], ext, true) >= 0
 
+  # Public: Is the filesystem case insensitive?
+  #
+  # Returns `true` if case insensitive, `false` otherwise.
   isCaseInsensitive: ->
     unless fsPlus.caseInsensitiveFs?
       lowerCaseStat = statSyncNoException(__filename.toLowerCase())
@@ -432,6 +435,11 @@ fsPlus =
         fsPlus.caseInsensitiveFs = false
 
     fsPlus.caseInsensitiveFs
+
+  # Public: Is the filesystem case sensitive?
+  #
+  # Returns `true` if case sensitive, `false` otherwise.
+  isCaseSensitive: -> not fsPlus.isCaseInsensitive()
 
 {statSyncNoException, lstatSyncNoException} = fs
 statSyncNoException ?= (args...) ->

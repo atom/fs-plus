@@ -262,3 +262,7 @@ describe "fs", ->
           expect(fs.isDirectorySync(path.join(destination, path.basename(source)))).toBeTruthy()
           expect(fs.isDirectorySync(path.join(destination, path.basename(source), 'b'))).toBeTruthy()
           expect(fs.isDirectorySync(path.join(destination, path.basename(source), path.basename(source)))).toBeFalsy()
+
+  describe ".isCaseSensitive()/isCaseInsensitive()", ->
+    it "does not return the same value for both", ->
+      expect(fs.isCaseInsensitive()).not.toBe fs.isCaseSensitive()
