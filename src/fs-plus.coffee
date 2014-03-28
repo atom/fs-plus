@@ -422,6 +422,17 @@ fsPlus =
       '.ron'
     ], ext, true) >= 0
 
+  isCaseInsensitive: ->
+    unless fsPlus.caseInsensitiveFs?
+      lowerCaseStat = fsPlus.statSyncNoException(__filename.toLowerCase())
+      upperCaseStat = fsPlus.statSyncNoException(__filename.toUpperCase())
+      if lowerCaseStat and upperCaseStat
+        fsPlus.caseInsensitiveFs = lowerCaseStat.dev is upperCaseStat.dev and lowerCaseStat.ino is upperCaseStat.ino
+      else
+        fsPlus.caseInsensitiveFs = false
+
+    fsPlus.caseInsensitiveFs
+
 {statSyncNoException, lstatSyncNoException} = fs
 statSyncNoException ?= (args...) ->
   try
