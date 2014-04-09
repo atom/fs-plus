@@ -130,6 +130,7 @@ fsPlus =
     return [] unless fsPlus.isDirectorySync(rootPath)
     paths = fs.readdirSync(rootPath)
     paths = fsPlus.filterExtensions(paths, extensions) if extensions
+    paths = paths.sort (a, b) -> a.toLowerCase().localeCompare(b.toLowerCase())
     paths = paths.map (childPath) -> path.join(rootPath, childPath)
     paths
 
@@ -148,6 +149,7 @@ fsPlus =
         done(error)
       else
         paths = fsPlus.filterExtensions(paths, extensions) if extensions
+        paths = paths.sort (a, b) -> a.toLowerCase().localeCompare(b.toLowerCase())
         paths = paths.map (childPath) -> path.join(rootPath, childPath)
         done(null, paths)
 
