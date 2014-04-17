@@ -328,8 +328,10 @@ fsPlus =
   # undefined otherwise.
   resolve: (args...) ->
     extensions = args.pop() if _.isArray(_.last(args))
-    pathToResolve = args.pop()
+    pathToResolve = args.pop()?.toString()
     loadPaths = args
+
+    return undefined unless pathToResolve
 
     if fsPlus.isAbsolute(pathToResolve)
       if extensions and resolvedPath = fsPlus.resolveExtension(pathToResolve, extensions)

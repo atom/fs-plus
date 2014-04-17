@@ -282,3 +282,19 @@ describe "fs", ->
   describe ".isCaseSensitive()/isCaseInsensitive()", ->
     it "does not return the same value for both", ->
       expect(fs.isCaseInsensitive()).not.toBe fs.isCaseSensitive()
+
+  describe ".resolve(loadPaths, pathToResolve, extensions)", ->
+    it "returns the resolved path or undefined if it does not exist", ->
+      expect(fs.resolve(fixturesDir, 'sample.js')).toBe path.join(fixturesDir, 'sample.js')
+      expect(fs.resolve(fixturesDir, 'sample', ['js'])).toBe path.join(fixturesDir, 'sample.js')
+      expect(fs.resolve(fixturesDir, 'sample', ['abc', 'txt'])).toBe path.join(fixturesDir, 'sample.txt')
+      expect(fs.resolve(fixturesDir)).toBe fixturesDir
+
+      expect(fs.resolve()).toBeUndefined()
+      expect(fs.resolve(fixturesDir, 'sample', ['badext'])).toBeUndefined()
+      expect(fs.resolve(fixturesDir, 'doesnotexist.js')).toBeUndefined()
+      expect(fs.resolve(fixturesDir, undefined)).toBeUndefined()
+      expect(fs.resolve(fixturesDir, 3)).toBeUndefined()
+      expect(fs.resolve(fixturesDir, false)).toBeUndefined()
+      expect(fs.resolve(fixturesDir, null)).toBeUndefined()
+      expect(fs.resolve(fixturesDir, '')).toBeUndefined()
