@@ -52,9 +52,12 @@ fsPlus =
   # Returns a {Boolean}, true if the path is absolute, false otherwise.
   isAbsolute: (pathToCheck='') ->
     if process.platform is 'win32'
-      pathToCheck[1] is ':' # C:\ style
+      return true if pathToCheck[1] is ':' # C:\ style
+      return true if pathToCheck[0] is '\\' and pathToCheck[1] is '\\' # \\server\share style
     else
-      pathToCheck[0] is '/' # /usr style
+      return pathToCheck[0] is '/' # /usr style
+
+    false
 
   # Public: Returns true if a file or folder at the specified path exists.
   existsSync: (pathToCheck) ->

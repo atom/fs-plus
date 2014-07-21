@@ -298,3 +298,36 @@ describe "fs", ->
       expect(fs.resolve(fixturesDir, false)).toBeUndefined()
       expect(fs.resolve(fixturesDir, null)).toBeUndefined()
       expect(fs.resolve(fixturesDir, '')).toBeUndefined()
+
+  describe ".isAbsolute(pathToCheck)", ->
+    originalPlatform = null
+
+    beforeEach ->
+      originalPlatform = process.platform
+
+    afterEach ->
+      Object.defineProperty process, 'platform', value: originalPlatform
+
+    it "returns true when the path is absolute, false otherwise", ->
+      Object.defineProperty process, 'platform', value: 'win32'
+
+      expect(fs.isAbsolute()).toBe false
+      expect(fs.isAbsolute(null)).toBe false
+      expect(fs.isAbsolute('')).toBe false
+      expect(fs.isAbsolute('test')).toBe false
+      expect(fs.isAbsolute('a\\b')).toBe false
+      expect(fs.isAbsolute('/a/b/c')).toBe false
+      expect(fs.isAbsolute('\\\\server\\share')).toBe true
+      expect(fs.isAbsolute('C:\\Drive')).toBe true
+
+      Object.defineProperty process, 'platform', value: 'linux'
+
+      expect(fs.isAbsolute()).toBe false
+      expect(fs.isAbsolute(null)).toBe false
+      expect(fs.isAbsolute('')).toBe false
+      expect(fs.isAbsolute('test')).toBe false
+      expect(fs.isAbsolute('a/b')).toBe false
+      expect(fs.isAbsolute('\\\\server\\share')).toBe false
+      expect(fs.isAbsolute('C:\\Drive')).toBe false
+      expect(fs.isAbsolute('/')).toBe true
+      expect(fs.isAbsolute('/a/b/c')).toBe true
