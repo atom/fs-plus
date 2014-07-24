@@ -413,6 +413,7 @@ fsPlus =
     _.indexOf([
       '.DS_Store'
       '.a'
+      '.exe'
       '.o'
       '.pyc'
       '.pyo'
