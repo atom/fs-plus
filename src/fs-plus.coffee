@@ -378,12 +378,18 @@ fsPlus =
   # Public: Returns true for extensions associated with compressed files.
   isCompressedExtension: (ext) ->
     _.indexOf([
+      '.bz2'
       '.epub'
       '.gz'
       '.jar'
+      '.lz'
+      '.lzma'
+      '.lzo'
       '.tar'
       '.tgz'
       '.war'
+      '.xz'
+      '.z'
       '.zip'
     ], ext, true) >= 0
 
