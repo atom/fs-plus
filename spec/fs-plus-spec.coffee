@@ -88,7 +88,7 @@ describe "fs", ->
       onPath = (childPath) ->
         paths.push(childPath)
         true
-      fs.traverseTreeSync fixturesDir, onPath, onPath
+      expect(fs.traverseTreeSync(fixturesDir, onPath, onPath)).toBeUndefined()
       expect(paths).toEqual fs.listTreeSync(fixturesDir)
 
     it "does not recurse into a directory if it is pruned", ->

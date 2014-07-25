@@ -257,7 +257,9 @@ fsPlus =
   # onFile - The {Function} to execute on each file, receives a single argument
   #          the absolute path.
   # onDirectory - The {Function} to execute on each directory, receives a single
-  #               argument the absolute path (defaults to onFile).
+  #               argument the absolute path (defaults to onFile). If this
+  #               function returns a falsy value then the directory is not
+  #               entered.
   traverseTreeSync: (rootPath, onFile, onDirectory=onFile) ->
     return unless fsPlus.isDirectorySync(rootPath)
 
@@ -272,6 +274,8 @@ fsPlus =
           traverse(childPath, onFile, onDirectory) if onDirectory(childPath)
         else if stats.isFile()
           onFile(childPath)
+
+      undefined
 
     traverse(rootPath, onFile, onDirectory)
 
