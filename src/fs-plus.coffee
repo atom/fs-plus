@@ -432,6 +432,7 @@ fsPlus =
       '.mdown'
       '.mkd'
       '.mkdown'
+      '.rmd'
       '.ron'
     ], ext, true) >= 0
 
