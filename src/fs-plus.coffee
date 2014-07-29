@@ -382,12 +382,18 @@ fsPlus =
   # Public: Returns true for extensions associated with compressed files.
   isCompressedExtension: (ext) ->
     _.indexOf([
+      '.bz2'
       '.epub'
       '.gz'
       '.jar'
+      '.lz'
+      '.lzma'
+      '.lzo'
       '.tar'
       '.tgz'
       '.war'
+      '.xz'
+      '.z'
       '.zip'
     ], ext, true) >= 0
 
@@ -411,6 +417,7 @@ fsPlus =
     _.indexOf([
       '.DS_Store'
       '.a'
+      '.exe'
       '.o'
       '.pyc'
       '.pyo'
