@@ -55,7 +55,7 @@ fsPlus =
     if process.platform is 'win32'
       return process.env.APPDATA
     else if process.platform is 'darwin'
-      return fsPlus.absolute '~/Library/Application Support/'
+      return fsPlus.absolute '~/Library/Application Support'
     else if process.platform is 'linux'
       dir = '/var/lib'
       return dir if fsPlus.existsSync dir
