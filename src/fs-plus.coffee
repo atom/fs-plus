@@ -53,14 +53,13 @@ fsPlus =
   # Linux: /var/lib
   getAppDataDirectory: ->
     if process.platform is 'win32'
-      return process.env.APPDATA
+      process.env.APPDATA
     else if process.platform is 'darwin'
-      return fsPlus.absolute '~/Library/Application Support'
+      fsPlus.absolute '~/Library/Application Support'
     else if process.platform is 'linux'
-      dir = '/var/lib'
-      return dir if fsPlus.existsSync dir
-
-    null
+      '/var/lib'
+    else
+      null
 
   # Public: Is the given path absolute?
   #
