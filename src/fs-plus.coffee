@@ -45,6 +45,22 @@ fsPlus =
     catch e
       relativePath
 
+  # Public: Get path to store application specific data
+  #
+  # Returns the {String} absolute path or null if platform isn't supported
+  # Mac: ~/Library/Application Support/
+  # Win: %AppData%
+  # Linux: /var/lib
+  getAppDataDirectory: ->
+    if process.platform is 'win32'
+      process.env.APPDATA
+    else if process.platform is 'darwin'
+      fsPlus.absolute '~/Library/Application Support'
+    else if process.platform is 'linux'
+      '/var/lib'
+    else
+      null
+
   # Public: Is the given path absolute?
   #
   # pathToCheck - The relative or absolute {String} path to check.

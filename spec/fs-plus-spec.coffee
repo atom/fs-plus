@@ -206,6 +206,33 @@ describe "fs", ->
       expect(fs.absolute(path.join('~', 'does', 'not', 'exist'))).toBe path.join(homeDir, 'does', 'not', 'exist')
       expect(fs.absolute('~test')).toBe '~test'
 
+  describe ".getAppDataDirectory", ->
+    originalPlatform = null
+
+    beforeEach ->
+      originalPlatform = process.platform
+
+    afterEach ->
+      Object.defineProperty process, 'platform', value: originalPlatform
+
+    it "returns a Application Support path on Mac", ->
+      Object.defineProperty process, 'platform', value: 'darwin'
+      expect(fs.getAppDataDirectory()).toBe path.join(process.env.HOME, 'Library', 'Application Support')
+
+    it "returns %AppData% on Windows", ->
+      Object.defineProperty process, 'platform', value: 'win32'
+      unless process.env.APPDATA
+        Object.defineProperty process.env, 'APPDATA', value: 'C:\\Users\\test\\AppData\\Roaming'
+      expect(fs.getAppDataDirectory()).toBe process.env.APPDATA
+
+    it "returns /var/lib on linux", ->
+      Object.defineProperty process, 'platform', value: 'linux'
+      expect(fs.getAppDataDirectory()).toBe '/var/lib'
+
+    it "returns null on other platforms", ->
+      Object.defineProperty process, 'platform', value: 'foobar'
+      expect(fs.getAppDataDirectory()).toBe null
+
   describe ".getSizeSync(pathToCheck)", ->
     it "returns the size of the file at the path", ->
       expect(fs.getSizeSync()).toBe -1
