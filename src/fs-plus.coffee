@@ -419,6 +419,7 @@ fsPlus =
       '.jpg'
       '.png'
       '.tiff'
+      '.webp'
     ], ext, true) >= 0
 
   # Public: Returns true for extensions associated with pdf files.
