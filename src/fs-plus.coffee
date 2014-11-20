@@ -74,11 +74,11 @@ fsPlus =
 
   # Public: Returns true if a file or folder at the specified path exists.
   existsSync: (pathToCheck) ->
-    pathToCheck?.length > 0 and statSyncNoException(pathToCheck) isnt false
+    isPathValid(pathToCheck) and (statSyncNoException(pathToCheck) isnt false)
 
   # Public: Returns true if the given path exists and is a directory.
   isDirectorySync: (directoryPath) ->
-    return false unless directoryPath?.length > 0
+    return false unless isPathValid(directoryPath)
     if stat = statSyncNoException(directoryPath)
       stat.isDirectory()
     else
@@ -86,7 +86,7 @@ fsPlus =
 
   # Public: Asynchronously checks that the given path exists and is a directory.
   isDirectory: (directoryPath, done) ->
-    return done(false) unless directoryPath?.length > 0
+    return done(false) unless isPathValid(directoryPath)
     fs.exists directoryPath, (exists) ->
       if exists
         fs.stat directoryPath, (error, stat) ->
@@ -99,7 +99,7 @@ fsPlus =
 
   # Public: Returns true if the specified path exists and is a file.
   isFileSync: (filePath) ->
-    return false unless filePath?.length > 0
+    return false unless isPathValid(filePath)
     if stat = statSyncNoException(filePath)
       stat.isFile()
     else
@@ -107,7 +107,7 @@ fsPlus =
 
   # Public: Returns true if the specified path is a symbolic link.
   isSymbolicLinkSync: (symlinkPath) ->
-    return false unless symlinkPath?.length > 0
+    return false unless isPathValid(symlinkPath)
     if stat = lstatSyncNoException(symlinkPath)
       stat.isSymbolicLink()
     else
@@ -115,7 +115,7 @@ fsPlus =
 
   # Public: Calls back with true if the specified path is a symbolic link.
   isSymbolicLink: (symlinkPath, callback) ->
-    if symlinkPath?.length > 0
+    if isPathValid(symlinkPath)
       fs.lstat symlinkPath, (error, stat) ->
         callback?(stat? and stat.isSymbolicLink())
     else
@@ -123,7 +123,7 @@ fsPlus =
 
   # Public: Returns true if the specified path is executable.
   isExecutableSync: (pathToCheck) ->
-    return false unless pathToCheck?.length > 0
+    return false unless isPathValid(pathToCheck)
     if stat = statSyncNoException(pathToCheck)
       (stat.mode & 0o777 & 1) isnt 0
     else
@@ -131,7 +131,7 @@ fsPlus =
 
   # Public: Returns the size of the specified path.
   getSizeSync: (pathToCheck) ->
-    if pathToCheck?.length > 0
+    if isPathValid(pathToCheck)
       statSyncNoException(pathToCheck).size ? -1
     else
       -1
@@ -488,5 +488,8 @@ lstatSyncNoException ?= (args...) ->
     fs.lstatSync(args...)
   catch error
     false
+
+isPathValid = (pathToCheck) ->
+  pathToCheck? and typeof pathToCheck is 'string' and pathToCheck.length > 0
 
 module.exports = _.extend({}, fs, fsPlus)
