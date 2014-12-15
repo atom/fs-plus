@@ -75,12 +75,39 @@ describe "fs", ->
     aPath = path.join(temp.dir, 'a')
 
     beforeEach ->
-      fs.remove(aPath) if fs.exists(aPath)
+      fs.removeSync(aPath) if fs.existsSync(aPath)
 
     it "creates all directories in path including any missing parent directories", ->
       abcPath = path.join(aPath, 'b', 'c')
       fs.makeTreeSync(abcPath)
-      expect(fs.existsSync(abcPath)).toBeTruthy()
+      expect(fs.isDirectorySync(abcPath)).toBeTruthy()
+
+  describe ".makeTree(path)", ->
+    aPath = path.join(temp.dir, 'a')
+
+    beforeEach ->
+      fs.removeSync(aPath) if fs.existsSync(aPath)
+
+    it "creates all directories in path including any missing parent directories", ->
+      callback = jasmine.createSpy('callback')
+      abcPath = path.join(aPath, 'b', 'c')
+      fs.makeTree(abcPath, callback)
+
+      waitsFor ->
+        callback.callCount is 1
+
+      runs ->
+        expect(callback.argsForCall[0][0]).toBeNull()
+        expect(fs.isDirectorySync(abcPath)).toBeTruthy()
+
+        fs.makeTree(abcPath, callback)
+
+      waitsFor ->
+        callback.callCount is 2
+
+      runs ->
+        expect(callback.argsForCall[1][0]).toBeUndefined()
+        expect(fs.isDirectorySync(abcPath)).toBeTruthy()
 
   describe ".traverseTreeSync(path, onFile, onDirectory)", ->
     it "calls fn for every path in the tree at the given path", ->

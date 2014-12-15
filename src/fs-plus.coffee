@@ -263,6 +263,13 @@ fsPlus =
   makeTreeSync: (directoryPath) ->
     mkdirp.sync(directoryPath) unless fsPlus.existsSync(directoryPath)
 
+  # Public: Create a directory at the specified path including any missing
+  # parent directories asynchronously.
+  makeTree: (directoryPath, callback) ->
+    fs.exists directoryPath, (exists) ->
+      return callback?() if exists
+      mkdirp directoryPath, (error) -> callback?(error)
+
   # Public: Recursively walk the given path and execute the given functions
   # synchronously.
   #
