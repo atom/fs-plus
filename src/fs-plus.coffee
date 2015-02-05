@@ -45,6 +45,27 @@ fsPlus =
     catch e
       relativePath
 
+  # Public: Normalize the given path treating a leading `~` segment as refering
+  # to the home directory. This method does not query the filesystem.
+  #
+  # pathToNormalize - The {String} containing the abnormal path. If the path is
+  #                   prefixed with '~', it will be expanded to the current
+  #                   user's home directory.
+  #
+  # Returns a normalized path {String}.
+  normalize: (pathToNormalize) ->
+    return null unless pathToNormalize?
+
+    normalizedPath = path.normalize(pathToNormalize.toString())
+
+    if home = fsPlus.getHomeDirectory()
+      if normalizedPath is '~'
+        normalizedPath = home
+      else if normalizedPath.indexOf("~#{path.sep}") is 0
+        normalizedPath = "#{home}#{normalizedPath.substring(1)}"
+
+    normalizedPath
+
   # Public: Get path to store application specific data
   #
   # Returns the {String} absolute path or null if platform isn't supported

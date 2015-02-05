@@ -385,3 +385,16 @@ describe "fs", ->
       expect(fs.isAbsolute('C:\\Drive')).toBe false
       expect(fs.isAbsolute('/')).toBe true
       expect(fs.isAbsolute('/a/b/c')).toBe true
+
+  describe ".normalize(pathToNormalize)", ->
+    it "normalizes the path", ->
+      expect(fs.normalize()).toBe null
+      expect(fs.normalize(null)).toBe null
+      expect(fs.normalize(true)).toBe 'true'
+      expect(fs.normalize('')).toBe '.'
+      expect(fs.normalize(3)).toBe '3'
+      expect(fs.normalize('a')).toBe 'a'
+      expect(fs.normalize('a/b/c/../d')).toBe path.join('a', 'b', 'd')
+      expect(fs.normalize('./a')).toBe 'a'
+      expect(fs.normalize('~')).toBe fs.getHomeDirectory()
+      expect(fs.normalize('~/foo')).toBe path.join(fs.getHomeDirectory(), 'foo')
