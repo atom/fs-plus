@@ -1,6 +1,7 @@
 fs = require 'fs'
 Module = require 'module'
 path = require 'path'
+isThere = require 'is-there'
 
 _ = require 'underscore-plus'
 async = require 'async'
@@ -108,7 +109,7 @@ fsPlus =
   # Public: Asynchronously checks that the given path exists and is a directory.
   isDirectory: (directoryPath, done) ->
     return done(false) unless isPathValid(directoryPath)
-    fs.exists directoryPath, (exists) ->
+    isThere directoryPath, (exists) ->
       if exists
         fs.stat directoryPath, (error, stat) ->
           if error?
