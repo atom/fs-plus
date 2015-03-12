@@ -221,6 +221,10 @@ fsPlus =
   removeSync: (pathToRemove) ->
     rimraf.sync(pathToRemove)
 
+  # Public: Removes the file or directory at the given path asynchronously.
+  remove: (pathToRemove, callback) ->
+    rimraf(pathToRemove, callback)
+
   # Public: Open, write, flush, and close a file, writing the given content
   # synchronously.
   #
