@@ -2,6 +2,8 @@ path = require 'path'
 temp = require 'temp'
 fs = require '../src/fs-plus'
 
+temp.track()
+
 describe "fs", ->
   fixturesDir = path.join(__dirname, 'fixtures')
 
