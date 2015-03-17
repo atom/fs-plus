@@ -71,6 +71,54 @@ describe "fs", ->
       expect(fs.existsSync("")).toBe false
       expect(fs.existsSync(null)).toBe false
 
+  describe ".remove(pathToRemove, callback)", ->
+    tempDir = null
+
+    beforeEach ->
+      tempDir = temp.mkdirSync('remove-directory')
+
+    it "removes an existing file", ->
+      filePath = path.join(tempDir, 'existing-file')
+      fs.writeFileSync(filePath, '')
+
+      done = false
+      fs.remove filePath, (err, result) ->
+        done = true
+
+      waitsFor ->
+        done
+
+      runs ->
+        expect(fs.existsSync(filePath)).toBe false
+
+    it "does nothing for a non-existent file", ->
+      filePath = path.join(tempDir, 'non-existent-file')
+
+      done = false
+      fs.remove filePath, (err, result) ->
+        done = true
+
+      waitsFor ->
+        done
+
+      runs ->
+        expect(fs.existsSync(filePath)).toBe false
+
+    it "removes a non-empty directory", ->
+      directoryPath = path.join(tempDir, 'subdir')
+      fs.makeTreeSync(path.join(directoryPath, 'subdir'))
+
+      done = false
+      fs.remove directoryPath, (err, result) ->
+        done = true
+
+      waitsFor ->
+        done
+
+      runs ->
+        expect(fs.existsSync(directoryPath)).toBe false
+
+
   describe ".makeTreeSync(path)", ->
     aPath = path.join(temp.dir, 'a')
 
