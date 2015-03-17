@@ -75,14 +75,14 @@ describe "fs", ->
     tempDir = null
 
     beforeEach ->
-      tempDir = temp.mkdirSync('remove-directory')
+      tempDir = temp.mkdirSync('fs-plus-')
 
     it "removes an existing file", ->
       filePath = path.join(tempDir, 'existing-file')
       fs.writeFileSync(filePath, '')
 
       done = false
-      fs.remove filePath, (err, result) ->
+      fs.remove filePath, ->
         done = true
 
       waitsFor ->
@@ -95,7 +95,7 @@ describe "fs", ->
       filePath = path.join(tempDir, 'non-existent-file')
 
       done = false
-      fs.remove filePath, (err, result) ->
+      fs.remove filePath, ->
         done = true
 
       waitsFor ->
@@ -109,7 +109,7 @@ describe "fs", ->
       fs.makeTreeSync(path.join(directoryPath, 'subdir'))
 
       done = false
-      fs.remove directoryPath, (err, result) ->
+      fs.remove directoryPath, ->
         done = true
 
       waitsFor ->
@@ -117,7 +117,6 @@ describe "fs", ->
 
       runs ->
         expect(fs.existsSync(directoryPath)).toBe false
-
 
   describe ".makeTreeSync(path)", ->
     aPath = path.join(temp.dir, 'a')
