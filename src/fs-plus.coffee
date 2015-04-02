@@ -429,6 +429,7 @@ fsPlus =
     _.indexOf([
       '.bz2'
       '.epub'
+      '.egg'
       '.gz'
       '.jar'
       '.lz'
@@ -437,6 +438,8 @@ fsPlus =
       '.tar'
       '.tgz'
       '.war'
+      '.whl'
+      '.xpi'
       '.xz'
       '.z'
       '.zip'
