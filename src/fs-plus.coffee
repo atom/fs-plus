@@ -428,8 +428,8 @@ fsPlus =
   isCompressedExtension: (ext) ->
     _.indexOf([
       '.bz2'
-      '.epub'
       '.egg'
+      '.epub'
       '.gz'
       '.jar'
       '.lz'
