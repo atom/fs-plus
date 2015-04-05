@@ -30,7 +30,7 @@ fsPlus =
   #                home directory.
   #
   # Returns the {String} absolute path or the relative path if it's unable to
-  # determine its realpath.
+  # determine its real path.
   absolute: (relativePath) ->
     return null unless relativePath?
 
@@ -46,7 +46,7 @@ fsPlus =
     catch e
       relativePath
 
-  # Public: Normalize the given path treating a leading `~` segment as refering
+  # Public: Normalize the given path treating a leading `~` segment as referring
   # to the home directory. This method does not query the filesystem.
   #
   # pathToNormalize - The {String} containing the abnormal path. If the path is
@@ -67,7 +67,7 @@ fsPlus =
 
     normalizedPath
 
-  # Public: Get path to store application specific data
+  # Public: Get path to store application specific data.
   #
   # Returns the {String} absolute path or null if platform isn't supported
   # Mac: ~/Library/Application Support/
