@@ -96,7 +96,7 @@ fsPlus =
 
   # Public: Returns true if a file or folder at the specified path exists.
   existsSync: (pathToCheck) ->
-    isPathValid(pathToCheck) and (statSyncNoException(pathToCheck) isnt false)
+    isPathValid(pathToCheck) and (isThere.sync(pathToCheck) isnt false)
 
   # Public: Returns true if the given path exists and is a directory.
   isDirectorySync: (directoryPath) ->
@@ -288,7 +288,7 @@ fsPlus =
   # Public: Create a directory at the specified path including any missing
   # parent directories asynchronously.
   makeTree: (directoryPath, callback) ->
-    fs.exists directoryPath, (exists) ->
+    isThere directoryPath, (exists) ->
       return callback?() if exists
       mkdirp directoryPath, (error) -> callback?(error)
 
