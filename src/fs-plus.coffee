@@ -278,7 +278,7 @@ fsPlus =
   # Public: Create a directory at the specified path including any missing
   # parent directories synchronously.
   makeTreeSync: (directoryPath) ->
-    mkdirp.sync(directoryPath) unless fsPlus.existsSync(directoryPath)
+    mkdirp.sync(directoryPath) unless fsPlus.isDirectorySync(directoryPath)
 
   # Public: Create a directory at the specified path including any missing
   # parent directories asynchronously.
