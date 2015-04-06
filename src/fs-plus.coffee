@@ -29,7 +29,7 @@ fsPlus =
   #                home directory.
   #
   # Returns the {String} absolute path or the relative path if it's unable to
-  # determine its realpath.
+  # determine its real path.
   absolute: (relativePath) ->
     return null unless relativePath?
 
@@ -45,7 +45,7 @@ fsPlus =
     catch e
       relativePath
 
-  # Public: Normalize the given path treating a leading `~` segment as refering
+  # Public: Normalize the given path treating a leading `~` segment as referring
   # to the home directory. This method does not query the filesystem.
   #
   # pathToNormalize - The {String} containing the abnormal path. If the path is
@@ -66,7 +66,7 @@ fsPlus =
 
     normalizedPath
 
-  # Public: Get path to store application specific data
+  # Public: Get path to store application specific data.
   #
   # Returns the {String} absolute path or null if platform isn't supported
   # Mac: ~/Library/Application Support/
@@ -108,15 +108,11 @@ fsPlus =
   # Public: Asynchronously checks that the given path exists and is a directory.
   isDirectory: (directoryPath, done) ->
     return done(false) unless isPathValid(directoryPath)
-    fs.exists directoryPath, (exists) ->
-      if exists
-        fs.stat directoryPath, (error, stat) ->
-          if error?
-            done(false)
-          else
-            done(stat.isDirectory())
-      else
+    fs.stat directoryPath, (error, stat) ->
+      if error?
         done(false)
+      else
+        done(stat.isDirectory())
 
   # Public: Returns true if the specified path exists and is a file.
   isFileSync: (filePath) ->
@@ -286,12 +282,12 @@ fsPlus =
   # Public: Create a directory at the specified path including any missing
   # parent directories synchronously.
   makeTreeSync: (directoryPath) ->
-    mkdirp.sync(directoryPath) unless fsPlus.existsSync(directoryPath)
+    mkdirp.sync(directoryPath) unless fsPlus.isDirectorySync(directoryPath)
 
   # Public: Create a directory at the specified path including any missing
   # parent directories asynchronously.
   makeTree: (directoryPath, callback) ->
-    fs.exists directoryPath, (exists) ->
+    fsPlus.isDirectory directoryPath, (exists) ->
       return callback?() if exists
       mkdirp directoryPath, (error) -> callback?(error)
 
