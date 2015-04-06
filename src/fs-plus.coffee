@@ -1,7 +1,6 @@
 fs = require 'fs'
 Module = require 'module'
 path = require 'path'
-isThere = require 'is-there'
 
 _ = require 'underscore-plus'
 async = require 'async'
@@ -96,7 +95,7 @@ fsPlus =
 
   # Public: Returns true if a file or folder at the specified path exists.
   existsSync: (pathToCheck) ->
-    isPathValid(pathToCheck) and (isThere.sync(pathToCheck) isnt false)
+    isPathValid(pathToCheck) and (statSyncNoException(pathToCheck) isnt false)
 
   # Public: Returns true if the given path exists and is a directory.
   isDirectorySync: (directoryPath) ->
@@ -109,15 +108,11 @@ fsPlus =
   # Public: Asynchronously checks that the given path exists and is a directory.
   isDirectory: (directoryPath, done) ->
     return done(false) unless isPathValid(directoryPath)
-    isThere directoryPath, (exists) ->
-      if exists
-        fs.stat directoryPath, (error, stat) ->
-          if error?
-            done(false)
-          else
-            done(stat.isDirectory())
-      else
+    fs.stat directoryPath, (error, stat) ->
+      if error?
         done(false)
+      else
+        done(stat.isDirectory())
 
   # Public: Returns true if the specified path exists and is a file.
   isFileSync: (filePath) ->
@@ -288,7 +283,7 @@ fsPlus =
   # Public: Create a directory at the specified path including any missing
   # parent directories asynchronously.
   makeTree: (directoryPath, callback) ->
-    isThere directoryPath, (exists) ->
+    fsPlus.isDirectory directoryPath, (exists) ->
       return callback?() if exists
       mkdirp directoryPath, (error) -> callback?(error)
 
