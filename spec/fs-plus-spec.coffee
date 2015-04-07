@@ -188,6 +188,7 @@ describe "fs", ->
 
       runs ->
         expect(callback.argsForCall[0][0]).toBeTruthy()
+        expect(callback.argsForCall[0][1]).toBeUndefined()
         expect(callback.argsForCall[0][0].code).toBe 'EEXIST'
         expect(callback.argsForCall[0][0].path).toBe filePath
 
