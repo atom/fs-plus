@@ -131,6 +131,21 @@ describe "fs", ->
       fs.makeTreeSync(abcPath)
       expect(fs.isDirectorySync(abcPath)).toBeTruthy()
 
+    it "throws an error when the provided path is a file", ->
+      tempDir = temp.mkdirSync('fs-plus-')
+      filePath = path.join(tempDir, 'file.txt')
+      fs.writeFileSync(filePath, '')
+      expect(fs.isFileSync(filePath)).toBe true
+
+      makeTreeError = null
+
+      try
+        fs.makeTreeSync(filePath)
+      catch error
+        makeTreeError = error
+
+      expect(makeTreeError.code).toBe 'EEXIST'
+      expect(makeTreeError.path).toBe filePath
 
   describe ".makeTree(path)", ->
     aPath = path.join(temp.dir, 'a')
@@ -159,7 +174,7 @@ describe "fs", ->
         expect(callback.argsForCall[1][0]).toBeUndefined()
         expect(fs.isDirectorySync(abcPath)).toBeTruthy()
 
-    it "fails because the provided path is a file", ->
+    it "calls back with an error when the provided path is a file", ->
       callback = jasmine.createSpy('callback')
       tempDir = temp.mkdirSync('fs-plus-')
       filePath = path.join(tempDir, 'file.txt')
