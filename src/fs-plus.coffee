@@ -493,8 +493,8 @@ fsPlus =
   # Returns `true` if case insensitive, `false` otherwise.
   isCaseInsensitive: ->
     unless fsPlus.caseInsensitiveFs?
-      lowerCaseStat = statSyncNoException(__filename.toLowerCase())
-      upperCaseStat = statSyncNoException(__filename.toUpperCase())
+      lowerCaseStat = statSyncNoException(process.execPath.toLowerCase())
+      upperCaseStat = statSyncNoException(process.execPath.toUpperCase())
       if lowerCaseStat and upperCaseStat
         fsPlus.caseInsensitiveFs = lowerCaseStat.dev is upperCaseStat.dev and lowerCaseStat.ino is upperCaseStat.ino
       else
