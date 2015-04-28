@@ -211,6 +211,15 @@ fsPlus =
 
   # Public: Moves the file or directory to the target synchronously.
   moveSync: (source, target) ->
+    unless isMoveTargetValidSync(source, target)
+      error = new Error("'#{target}' already exists.")
+      error.code = 'EEXIST'
+      throw error
+
+    targetParentPath = path.dirname(target)
+    if !fs.existsSync(targetParentPath)
+      fsPlus.makeTreeSync(targetParentPath)
+
     fs.renameSync(source, target)
 
   # Public: Removes the file or directory at the given path synchronously.
@@ -522,5 +531,19 @@ lstatSyncNoException ?= (args...) ->
 
 isPathValid = (pathToCheck) ->
   pathToCheck? and typeof pathToCheck is 'string' and pathToCheck.length > 0
+
+isMoveTargetValidSync = (source, target) ->
+  try
+    oldStat = fs.statSync(source)
+    newStat = fs.statSync(target)
+
+    # New path exists so check if it points to the same file as the initial
+    # path to see if the case of the file name is being changed on a case
+    # insensitive filesystem.
+    source.toLowerCase() is target.toLowerCase() and
+      oldStat.dev is newStat.dev and
+      oldStat.ino is newStat.ino
+  catch error
+    true # new path does not exist so it is valid
 
 module.exports = _.extend({}, fs, fsPlus)
