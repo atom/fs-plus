@@ -4,6 +4,7 @@ path = require 'path'
 
 _ = require 'underscore-plus'
 async = require 'async'
+{Promise} = require 'es6-promise'
 mkdirp = require 'mkdirp'
 rimraf = require 'rimraf'
 
