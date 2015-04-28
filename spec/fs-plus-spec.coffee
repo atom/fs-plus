@@ -511,9 +511,10 @@ describe "fs", ->
 
       waitsForPromise -> fs.move(directoryPath, newDirectoryPath)
 
-      # If the filesystem is case-insensitive, the old directory should still exist.
-      expect(fs.existsSync(directoryPath)).toBe fs.isCaseInsensitive()
-      expect(fs.existsSync(newDirectoryPath)).toBe true
+      runs ->
+        # If the filesystem is case-insensitive, the old directory should still exist.
+        expect(fs.existsSync(directoryPath)).toBe fs.isCaseInsensitive()
+        expect(fs.existsSync(newDirectoryPath)).toBe true
 
     it 'renames to a target with an existent parent directory', ->
       directoryPath = path.join(tempDir, 'subdir')
