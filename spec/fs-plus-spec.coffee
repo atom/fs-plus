@@ -482,6 +482,71 @@ describe "fs", ->
       expect(fs.normalize('~')).toBe fs.getHomeDirectory()
       expect(fs.normalize('~/foo')).toBe path.join(fs.getHomeDirectory(), 'foo')
 
+  describe ".move", ->
+    tempDir = null
+
+    beforeEach ->
+      tempDir = temp.mkdirSync('fs-plus-')
+
+    it 'rejects if the source does not exist', ->
+      directoryPath = path.join(tempDir, 'subdir')
+      newDirectoryPath = path.join(tempDir, 'subdir2', 'subdir2')
+
+      waitsForPromise shouldReject: true,
+        -> fs.move(directoryPath, newDirectoryPath)
+
+    it 'rejects if the target already exists', ->
+      directoryPath = path.join(tempDir, 'subdir')
+      fs.mkdirSync(directoryPath)
+      newDirectoryPath = path.join(tempDir, 'subdir2')
+      fs.mkdirSync(newDirectoryPath)
+
+      waitsForPromise shouldReject: true,
+        -> fs.move(directoryPath, newDirectoryPath)
+
+    it 'renames if the target just has different letter casing', ->
+      directoryPath = path.join(tempDir, 'subdir')
+      fs.mkdirSync(directoryPath)
+      newDirectoryPath = path.join(tempDir, 'SUBDIR')
+
+      waitsForPromise -> fs.move(directoryPath, newDirectoryPath)
+
+      expect(fs.existsSync(directoryPath)).toBe true
+      expect(fs.existsSync(newDirectoryPath)).toBe true
+
+    it 'renames to a target with an existent parent directory', ->
+      directoryPath = path.join(tempDir, 'subdir')
+      fs.mkdirSync(directoryPath)
+      newDirectoryPath = path.join(tempDir, 'subdir2')
+
+      waitsForPromise -> fs.move(directoryPath, newDirectoryPath)
+
+      runs ->
+        expect(fs.existsSync(directoryPath)).toBe false
+        expect(fs.existsSync(newDirectoryPath)).toBe true
+
+    it 'renames to a target with a non-existent parent directory', ->
+      directoryPath = path.join(tempDir, 'subdir')
+      fs.mkdirSync(directoryPath)
+      newDirectoryPath = path.join(tempDir, 'subdir2/subdir2')
+
+      waitsForPromise -> fs.move(directoryPath, newDirectoryPath)
+
+      runs ->
+        expect(fs.existsSync(directoryPath)).toBe false
+        expect(fs.existsSync(newDirectoryPath)).toBe true
+
+    it 'renames files', ->
+      filePath = path.join(tempDir, 'subdir')
+      fs.writeFileSync(filePath, '')
+      newFilePath = path.join(tempDir, 'subdir2')
+
+      waitsForPromise -> fs.move(filePath, newFilePath)
+
+      runs ->
+        expect(fs.existsSync(filePath)).toBe false
+        expect(fs.existsSync(newFilePath)).toBe true
+
   describe ".moveSync", ->
     tempDir = null
 

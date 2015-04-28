@@ -209,7 +209,16 @@ fsPlus =
     fsPlus.traverseTreeSync(rootPath, onPath, onPath)
     paths
 
-  # Public: Moves the file or directory to the target synchronously.
+  # Public: Moves the source file or directory to the target asynchronously.
+  move: (source, target) ->
+    new Promise (resolve, reject) ->
+      try
+        fsPlus.moveSync(source, target)
+        resolve()
+      catch error
+        reject(error)
+
+  # Public: Moves the source file or directory to the target synchronously.
   moveSync: (source, target) ->
     unless isMoveTargetValidSync(source, target)
       error = new Error("'#{target}' already exists.")
