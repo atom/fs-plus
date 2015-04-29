@@ -213,11 +213,32 @@ fsPlus =
   # Public: Moves the source file or directory to the target asynchronously.
   move: (source, target) ->
     new Promise (resolve, reject) ->
-      try
-        fsPlus.moveSync(source, target)
-        resolve()
-      catch error
-        reject(error)
+      isMoveTargetValid(source, target)
+        .catch (err) -> reject(err)
+        .then (isTargetValid) ->
+          if !isTargetValid
+            error = new Error("'#{target}' already exists.")
+            error.code = 'EEXIST'
+            reject(error)
+          else
+            targetParentPath = path.dirname(target)
+            fs.exists targetParentPath, (targetParentExists) ->
+              if targetParentExists
+                fs.rename source, target, (renameErr) ->
+                  if renameErr
+                    reject(renameErr)
+                  else
+                    resolve()
+              else
+                fsPlus.makeTree targetParentPath, (makeTreeErr) ->
+                  if makeTreeErr
+                    reject(makeTreeErr)
+                  else
+                    fs.rename source, target, (renameErr) ->
+                      if renameErr
+                        reject(renameErr)
+                      else
+                        resolve()
 
   # Public: Moves the source file or directory to the target synchronously.
   moveSync: (source, target) ->
@@ -541,6 +562,23 @@ lstatSyncNoException ?= (args...) ->
 
 isPathValid = (pathToCheck) ->
   pathToCheck? and typeof pathToCheck is 'string' and pathToCheck.length > 0
+
+isMoveTargetValid = (source, target) ->
+  new Promise (resolve, reject) ->
+    fs.stat source, (oldErr, oldStat) ->
+      if oldErr
+        reject oldErr
+      else
+        fs.stat target, (newErr, newStat) ->
+          if newErr and newErr.code == 'ENOENT'
+            resolve true # new path does not exist so it is valid
+          else
+            # New path exists so check if it points to the same file as the initial
+            # path to see if the case of the file name is being changed on a case
+            # insensitive filesystem.
+            resolve(source.toLowerCase() is target.toLowerCase() and
+              oldStat.dev is newStat.dev and
+              oldStat.ino is newStat.ino)
 
 isMoveTargetValidSync = (source, target) ->
   try
