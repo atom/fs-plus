@@ -488,28 +488,46 @@ describe "fs", ->
     beforeEach ->
       tempDir = temp.mkdirSync('fs-plus-')
 
-    it 'rejects if the source does not exist', ->
+    it 'calls back with an error if the source does not exist', ->
+      callback = jasmine.createSpy('callback')
       directoryPath = path.join(tempDir, 'subdir')
       newDirectoryPath = path.join(tempDir, 'subdir2', 'subdir2')
 
-      waitsForPromise shouldReject: true,
-        -> fs.move(directoryPath, newDirectoryPath)
+      fs.move(directoryPath, newDirectoryPath, callback)
 
-    it 'rejects if the target already exists', ->
+      waitsFor ->
+        callback.callCount is 1
+
+      runs ->
+        expect(callback.argsForCall[0][0]).toBeTruthy()
+        expect(callback.argsForCall[0][0].code).toBe 'ENOENT'
+
+    it 'calls back with an error if the target already exists', ->
+      callback = jasmine.createSpy('callback')
       directoryPath = path.join(tempDir, 'subdir')
       fs.mkdirSync(directoryPath)
       newDirectoryPath = path.join(tempDir, 'subdir2')
       fs.mkdirSync(newDirectoryPath)
 
-      waitsForPromise shouldReject: true,
-        -> fs.move(directoryPath, newDirectoryPath)
+      fs.move(directoryPath, newDirectoryPath, callback)
+
+      waitsFor ->
+        callback.callCount is 1
+
+      runs ->
+        expect(callback.argsForCall[0][0]).toBeTruthy()
+        expect(callback.argsForCall[0][0].code).toBe 'EEXIST'
 
     it 'renames if the target just has different letter casing', ->
+      callback = jasmine.createSpy('callback')
       directoryPath = path.join(tempDir, 'subdir')
       fs.mkdirSync(directoryPath)
       newDirectoryPath = path.join(tempDir, 'SUBDIR')
 
-      waitsForPromise -> fs.move(directoryPath, newDirectoryPath)
+      fs.move(directoryPath, newDirectoryPath, callback)
+
+      waitsFor ->
+        callback.callCount is 1
 
       runs ->
         # If the filesystem is case-insensitive, the old directory should still exist.
@@ -517,33 +535,45 @@ describe "fs", ->
         expect(fs.existsSync(newDirectoryPath)).toBe true
 
     it 'renames to a target with an existent parent directory', ->
+      callback = jasmine.createSpy('callback')
       directoryPath = path.join(tempDir, 'subdir')
       fs.mkdirSync(directoryPath)
       newDirectoryPath = path.join(tempDir, 'subdir2')
 
-      waitsForPromise -> fs.move(directoryPath, newDirectoryPath)
+      fs.move(directoryPath, newDirectoryPath, callback)
+
+      waitsFor ->
+        callback.callCount is 1
 
       runs ->
         expect(fs.existsSync(directoryPath)).toBe false
         expect(fs.existsSync(newDirectoryPath)).toBe true
 
     it 'renames to a target with a non-existent parent directory', ->
+      callback = jasmine.createSpy('callback')
       directoryPath = path.join(tempDir, 'subdir')
       fs.mkdirSync(directoryPath)
       newDirectoryPath = path.join(tempDir, 'subdir2/subdir2')
 
-      waitsForPromise -> fs.move(directoryPath, newDirectoryPath)
+      fs.move(directoryPath, newDirectoryPath, callback)
+
+      waitsFor ->
+        callback.callCount is 1
 
       runs ->
         expect(fs.existsSync(directoryPath)).toBe false
         expect(fs.existsSync(newDirectoryPath)).toBe true
 
     it 'renames files', ->
+      callback = jasmine.createSpy('callback')
       filePath = path.join(tempDir, 'subdir')
       fs.writeFileSync(filePath, '')
       newFilePath = path.join(tempDir, 'subdir2')
 
-      waitsForPromise -> fs.move(filePath, newFilePath)
+      fs.move(filePath, newFilePath, callback)
+
+      waitsFor ->
+        callback.callCount is 1
 
       runs ->
         expect(fs.existsSync(filePath)).toBe false
