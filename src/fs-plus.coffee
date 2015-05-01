@@ -577,17 +577,17 @@ isMoveTargetValid = (source, target, callback) ->
         oldStat.ino is newStat.ino)
 
 isMoveTargetValidSync = (source, target) ->
-  try
-    oldStat = fs.statSync(source)
-    newStat = fs.statSync(target)
+  oldStat = statSyncNoException(source)
+  newStat = statSyncNoException(target)
 
-    # New path exists so check if it points to the same file as the initial
-    # path to see if the case of the file name is being changed on a case
-    # insensitive filesystem.
-    source.toLowerCase() is target.toLowerCase() and
-      oldStat.dev is newStat.dev and
-      oldStat.ino is newStat.ino
-  catch error
-    true # new path does not exist so it is valid
+  if oldStat is false or newStat is false
+    return true
+
+  # New path exists so check if it points to the same file as the initial
+  # path to see if the case of the file name is being changed on a case
+  # insensitive filesystem.
+  source.toLowerCase() is target.toLowerCase() and
+    oldStat.dev is newStat.dev and
+    oldStat.ino is newStat.ino
 
 module.exports = _.extend({}, fs, fsPlus)
