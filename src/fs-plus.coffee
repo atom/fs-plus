@@ -216,7 +216,7 @@ fsPlus =
         callback(isMoveTargetValidErr)
         return
 
-      if !isTargetValid
+      unless isTargetValid
         error = new Error("'#{target}' already exists.")
         error.code = 'EEXIST'
         callback(error)
@@ -243,9 +243,7 @@ fsPlus =
       throw error
 
     targetParentPath = path.dirname(target)
-    if !fs.existsSync(targetParentPath)
-      fsPlus.makeTreeSync(targetParentPath)
-
+    fsPlus.makeTreeSync(targetParentPath) unless fs.existsSync(targetParentPath)
     fs.renameSync(source, target)
 
   # Public: Removes the file or directory at the given path synchronously.
@@ -448,7 +446,7 @@ fsPlus =
   # extensions, otherwise it's undefined.
   resolveExtension: (pathToResolve, extensions) ->
     for extension in extensions
-      if extension == ""
+      if extension is ""
         return fsPlus.absolute(pathToResolve) if fsPlus.existsSync(pathToResolve)
       else
         pathWithExtension = pathToResolve + "." + extension.replace(/^\./, "")
@@ -565,7 +563,7 @@ isMoveTargetValid = (source, target, callback) ->
       return
 
     fs.stat target, (newErr, newStat) ->
-      if newErr and newErr.code == 'ENOENT'
+      if newErr and newErr.code is 'ENOENT'
         callback(undefined, true) # new path does not exist so it is valid
         return
 
@@ -580,8 +578,7 @@ isMoveTargetValidSync = (source, target) ->
   oldStat = statSyncNoException(source)
   newStat = statSyncNoException(target)
 
-  if oldStat is false or newStat is false
-    return true
+  return true unless oldStat and newStat
 
   # New path exists so check if it points to the same file as the initial
   # path to see if the case of the file name is being changed on a case
