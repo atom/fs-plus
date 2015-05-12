@@ -455,36 +455,11 @@ fsPlus =
 
   # Public: Returns true for extensions associated with compressed files.
   isCompressedExtension: (ext) ->
-    _.indexOf([
-      '.bz2'
-      '.egg'
-      '.epub'
-      '.gz'
-      '.jar'
-      '.lz'
-      '.lzma'
-      '.lzo'
-      '.tar'
-      '.tgz'
-      '.war'
-      '.whl'
-      '.xpi'
-      '.xz'
-      '.z'
-      '.zip'
-    ], ext, true) >= 0
+    COMPRESSED_EXTENSIONS[ext] == true
 
   # Public: Returns true for extensions associated with image files.
   isImageExtension: (ext) ->
-    _.indexOf([
-      '.gif'
-      '.ico'
-      '.jpeg'
-      '.jpg'
-      '.png'
-      '.tiff'
-      '.webp'
-    ], ext, true) >= 0
+    IMAGE_EXTENSIONS[ext] == true
 
   # Public: Returns true for extensions associated with pdf files.
   isPdfExtension: (ext) ->
@@ -492,16 +467,7 @@ fsPlus =
 
   # Public: Returns true for extensions associated with binary files.
   isBinaryExtension: (ext) ->
-    _.indexOf([
-      '.DS_Store'
-      '.a'
-      '.exe'
-      '.o'
-      '.pyc'
-      '.pyo'
-      '.so'
-      '.woff'
-    ], ext, true) >= 0
+    BINARY_EXTENSIONS[ext] == true
 
   # Public: Returns true for files named similarily to 'README'
   isReadmePath: (readmePath) ->
@@ -511,15 +477,7 @@ fsPlus =
 
   # Public: Returns true for extensions associated with Markdown files.
   isMarkdownExtension: (ext) ->
-    _.indexOf([
-      '.markdown'
-      '.md'
-      '.mdown'
-      '.mkd'
-      '.mkdown'
-      '.rmd'
-      '.ron'
-    ], ext, true) >= 0
+    MARKDOWN_EXTENSIONS[ext] == true
 
   # Public: Is the filesystem case insensitive?
   #
@@ -552,6 +510,56 @@ lstatSyncNoException ?= (args...) ->
     fs.lstatSync(args...)
   catch error
     false
+
+BINARY_EXTENSIONS = {
+  '.DS_Store': true,
+  '.a': true,
+  '.exe': true,
+  '.o': true,
+  '.pyc': true,
+  '.pyo': true,
+  '.so': true,
+  '.woff': true,
+}
+
+COMPRESSED_EXTENSIONS = {
+  '.bz2': true,
+  '.egg': true,
+  '.epub': true,
+  '.gz': true,
+  '.jar': true,
+  '.lz': true,
+  '.lzma': true,
+  '.lzo': true,
+  '.tar': true,
+  '.tgz': true,
+  '.war': true,
+  '.whl': true,
+  '.xpi': true,
+  '.xz': true,
+  '.z': true,
+  '.zip': true,
+}
+
+IMAGE_EXTENSIONS = {
+  '.gif': true,
+  '.ico': true,
+  '.jpeg': true,
+  '.jpg': true,
+  '.png': true,
+  '.tiff': true,
+  '.webp': true,
+}
+
+MARKDOWN_EXTENSIONS = {
+  '.markdown': true,
+  '.md': true,
+  '.mdown': true,
+  '.mkd': true,
+  '.mkdown': true,
+  '.rmd': true,
+  '.ron': true,
+}
 
 isPathValid = (pathToCheck) ->
   pathToCheck? and typeof pathToCheck is 'string' and pathToCheck.length > 0

@@ -639,3 +639,52 @@ describe "fs", ->
 
       expect(fs.existsSync(filePath)).toBe false
       expect(fs.existsSync(newFilePath)).toBe true
+
+
+  describe '.isBinaryExtension', ->
+
+    it 'returns true for a recognized binary file extension', ->
+      expect(fs.isBinaryExtension('.DS_Store')).toBe true
+
+    it 'returns false for non-binary file extension', ->
+      expect(fs.isBinaryExtension('.bz2')).toBe false
+
+  describe ".isCompressedExtension", ->
+
+    it 'returns true for a recognized compressed file extension', ->
+      expect(fs.isCompressedExtension('.bz2')).toBe true
+
+    it 'returns false for non-compressed file extension', ->
+      expect(fs.isCompressedExtension('.jpg')).toBe false
+
+  describe '.isImageExtension', ->
+
+    it 'returns true for a recognized image file extension', ->
+      expect(fs.isImageExtension('.jpg')).toBe true
+
+    it 'returns false for non-image file extension', ->
+      expect(fs.isImageExtension('.bz2')).toBe false
+
+  describe '.isMarkdownExtension', ->
+
+    it 'returns true for a recognized Markdown file extension', ->
+      expect(fs.isMarkdownExtension('.md')).toBe true
+
+    it 'returns false for non-Markdown file extension', ->
+      expect(fs.isMarkdownExtension('.bz2')).toBe false
+
+  describe '.isPdfExtension', ->
+
+    it 'returns true for a recognized PDF file extension', ->
+      expect(fs.isPdfExtension('.pdf')).toBe true
+
+    it 'returns false for non-PDF file extension', ->
+      expect(fs.isPdfExtension('.bz2')).toBe false
+
+  describe '.isReadmePath', ->
+
+    it 'returns true for a recognized README path', ->
+      expect(fs.isReadmePath('./path/to/README.md')).toBe true
+
+    it 'returns false for non README path', ->
+      expect(fs.isReadmePath('./path/foo.txt')).toBe false
