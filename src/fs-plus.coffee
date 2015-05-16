@@ -384,6 +384,8 @@ fsPlus =
                     callback()
               else
                 callback()
+            else
+              callback()
         queue.concurrency = 1
         queue.drain = onDone
         queue.push(path.join(rootPath, file)) for file in files
