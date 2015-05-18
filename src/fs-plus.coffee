@@ -511,55 +511,51 @@ lstatSyncNoException ?= (args...) ->
   catch error
     false
 
-BINARY_EXTENSIONS = {
-  '.DS_Store': true,
-  '.a': true,
-  '.exe': true,
-  '.o': true,
-  '.pyc': true,
-  '.pyo': true,
-  '.so': true,
-  '.woff': true,
-}
+BINARY_EXTENSIONS =
+  '.DS_Store': true
+  '.a':        true
+  '.exe':      true
+  '.o':        true
+  '.pyc':      true
+  '.pyo':      true
+  '.so':       true
+  '.woff':     true
 
-COMPRESSED_EXTENSIONS = {
-  '.bz2': true,
-  '.egg': true,
-  '.epub': true,
-  '.gz': true,
-  '.jar': true,
-  '.lz': true,
-  '.lzma': true,
-  '.lzo': true,
-  '.tar': true,
-  '.tgz': true,
-  '.war': true,
-  '.whl': true,
-  '.xpi': true,
-  '.xz': true,
-  '.z': true,
-  '.zip': true,
-}
+COMPRESSED_EXTENSIONS =
+  '.bz2':  true
+  '.egg':  true
+  '.epub': true
+  '.gz':   true
+  '.jar':  true
+  '.lz':   true
+  '.lzma': true
+  '.lzo':  true
+  '.tar':  true
+  '.tgz':  true
+  '.war':  true
+  '.whl':  true
+  '.xpi':  true
+  '.xz':   true
+  '.z':    true
+  '.zip':  true
 
-IMAGE_EXTENSIONS = {
-  '.gif': true,
-  '.ico': true,
-  '.jpeg': true,
-  '.jpg': true,
-  '.png': true,
-  '.tiff': true,
-  '.webp': true,
-}
+IMAGE_EXTENSIONS =
+  '.gif':  true
+  '.ico':  true
+  '.jpeg': true
+  '.jpg':  true
+  '.png':  true
+  '.tiff': true
+  '.webp': true
 
-MARKDOWN_EXTENSIONS = {
-  '.markdown': true,
-  '.md': true,
-  '.mdown': true,
-  '.mkd': true,
-  '.mkdown': true,
-  '.rmd': true,
-  '.ron': true,
-}
+MARKDOWN_EXTENSIONS =
+  '.markdown': true
+  '.md':       true
+  '.mdown':    true
+  '.mkd':      true
+  '.mkdown':   true
+  '.rmd':      true
+  '.ron':      true
 
 isPathValid = (pathToCheck) ->
   pathToCheck? and typeof pathToCheck is 'string' and pathToCheck.length > 0
