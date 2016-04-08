@@ -457,19 +457,22 @@ fsPlus =
 
   # Public: Returns true for extensions associated with compressed files.
   isCompressedExtension: (ext) ->
-    COMPRESSED_EXTENSIONS.hasOwnProperty(ext)
+    return false unless ext?
+    COMPRESSED_EXTENSIONS.hasOwnProperty(ext.toLowerCase())
 
   # Public: Returns true for extensions associated with image files.
   isImageExtension: (ext) ->
-    IMAGE_EXTENSIONS.hasOwnProperty(ext)
+    return false unless ext?
+    IMAGE_EXTENSIONS.hasOwnProperty(ext.toLowerCase())
 
   # Public: Returns true for extensions associated with pdf files.
   isPdfExtension: (ext) ->
-    ext is '.pdf'
+    ext?.toLowerCase() is '.pdf'
 
   # Public: Returns true for extensions associated with binary files.
   isBinaryExtension: (ext) ->
-    BINARY_EXTENSIONS.hasOwnProperty(ext)
+    return false unless ext?
+    BINARY_EXTENSIONS.hasOwnProperty(ext.toLowerCase())
 
   # Public: Returns true for files named similarily to 'README'
   isReadmePath: (readmePath) ->
@@ -479,7 +482,8 @@ fsPlus =
 
   # Public: Returns true for extensions associated with Markdown files.
   isMarkdownExtension: (ext) ->
-    MARKDOWN_EXTENSIONS.hasOwnProperty(ext)
+    return false unless ext?
+    MARKDOWN_EXTENSIONS.hasOwnProperty(ext.toLowerCase())
 
   # Public: Is the filesystem case insensitive?
   #
