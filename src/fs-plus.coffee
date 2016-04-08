@@ -518,7 +518,7 @@ lstatSyncNoException ?= (args...) ->
     false
 
 BINARY_EXTENSIONS =
-  '.DS_Store': true
+  '.ds_store': true
   '.a':        true
   '.exe':      true
   '.o':        true
