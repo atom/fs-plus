@@ -646,6 +646,9 @@ describe "fs", ->
 
     it 'returns false for non-binary file extension', ->
       expect(fs.isBinaryExtension('.bz2')).toBe false
+    
+    it 'returns true for an uppercase binary file extension', ->
+      expect(fs.isBinaryExtension('.EXE')).toBe true
 
   describe ".isCompressedExtension", ->
     it 'returns true for a recognized compressed file extension', ->
@@ -667,6 +670,9 @@ describe "fs", ->
 
     it 'returns false for non-Markdown file extension', ->
       expect(fs.isMarkdownExtension('.bz2')).toBe false
+    
+    it 'returns true for a recognised Markdown file extension with unusual capitalisation', ->
+      expect(fs.isMarkdownExtension('.MaRKdOwN')).toBe true
 
   describe '.isPdfExtension', ->
     it 'returns true for a recognized PDF file extension', ->
@@ -674,6 +680,9 @@ describe "fs", ->
 
     it 'returns false for non-PDF file extension', ->
       expect(fs.isPdfExtension('.bz2')).toBe false
+    
+    it 'returns true for an uppercase PDF file extension', ->
+      expect(fs.isPdfExtension('.PDF')).toBe true
 
   describe '.isReadmePath', ->
     it 'returns true for a recognized README path', ->
