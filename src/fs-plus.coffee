@@ -531,6 +531,7 @@ COMPRESSED_EXTENSIONS =
   '.bz2':  true
   '.egg':  true
   '.epub': true
+  '.gem':  true
   '.gz':   true
   '.jar':  true
   '.lz':   true
