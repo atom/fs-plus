@@ -536,6 +536,7 @@ COMPRESSED_EXTENSIONS =
   '.lz':   true
   '.lzma': true
   '.lzo':  true
+  '.rar':  true
   '.tar':  true
   '.tgz':  true
   '.war':  true
