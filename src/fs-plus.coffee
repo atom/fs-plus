@@ -553,6 +553,7 @@ IMAGE_EXTENSIONS =
   '.jpeg': true
   '.jpg':  true
   '.png':  true
+  '.tif':  true
   '.tiff': true
   '.webp': true
 
