@@ -33,6 +33,6 @@
     "underscore-plus": "1.x",
     "mkdirp": "^0.5.1",
     "rimraf": "~2.2.2",
-    "async": "~0.2.9"
+    "async": "^1.5.2"
   }
 }
