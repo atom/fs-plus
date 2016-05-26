@@ -420,7 +420,9 @@ describe "fs", ->
     it "copies the specified file", ->
       sourceFilePath = temp.path()
       destinationFilePath = temp.path()
-      fs.writeFileSync(sourceFilePath, 'ABCDE'.repeat(20000))
+      content = ''
+      content += 'ABCDE' for i in [0...20000] by 1
+      fs.writeFileSync(sourceFilePath, content)
       fs.copyFileSync(sourceFilePath, destinationFilePath)
       expect(fs.readFileSync(destinationFilePath, 'utf8')).toBe(fs.readFileSync(sourceFilePath, 'utf8'))
 
