@@ -1,6 +1,6 @@
 {
   "name": "fs-plus",
-  "version": "2.8.2",
+  "version": "2.9.0",
   "description": "node's fs with more helpers",
   "main": "./lib/fs-plus.js",
   "scripts": {
