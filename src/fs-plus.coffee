@@ -309,8 +309,29 @@ fsPlus =
       if fsPlus.isDirectorySync(sourceFilePath)
         fsPlus.copySync(sourceFilePath, destinationFilePath)
       else
-        content = fs.readFileSync(sourceFilePath)
-        fs.writeFileSync(destinationFilePath, content)
+        fsPlus.copyFileSync(sourceFilePath, destinationFilePath)
+
+  # Public: Copies the given path synchronously, buffering reads and writes to
+  # keep memory footprint to a minimum.
+  #
+  # * sourceFilePath - A {String} representing the file path you want to copy.
+  # * destinationFilePath - A {String} representing the file path where the file will be copied.
+  # * bufferSize - An {Integer} representing the size in bytes of the buffer
+  #   when reading from and writing to disk. The default is 16KB.
+  copyFileSync: (sourceFilePath, destinationFilePath, bufferSize=16 * 1024) ->
+    readFd = null
+    writeFd = null
+    try
+      readFd = fs.openSync(sourceFilePath, 'r')
+      writeFd = fs.openSync(destinationFilePath, 'w')
+      loop
+        buffer = new Buffer(bufferSize)
+        bytesRead = fs.readSync(readFd, buffer, 0, buffer.length)
+        fs.writeSync(writeFd, buffer, 0, bytesRead)
+        break if bytesRead < buffer.length
+    finally
+      fs.closeSync(readFd) if readFd?
+      fs.closeSync(writeFd) if writeFd?
 
   # Public: Create a directory at the specified path including any missing
   # parent directories synchronously.
