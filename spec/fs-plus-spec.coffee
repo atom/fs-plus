@@ -419,7 +419,7 @@ describe "fs", ->
   describe ".copyFileSync(sourceFilePath, destinationFilePath)", ->
     it "copies the specified file", ->
       sourceFilePath = temp.path()
-      destinationFilePath = temp.path()
+      destinationFilePath = path.join(temp.path(), '/unexisting-dir/foo.bar')
       content = ''
       content += 'ABCDE' for i in [0...20000] by 1
       fs.writeFileSync(sourceFilePath, content)

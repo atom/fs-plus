@@ -312,13 +312,16 @@ fsPlus =
         fsPlus.copyFileSync(sourceFilePath, destinationFilePath)
 
   # Public: Copies the given path synchronously, buffering reads and writes to
-  # keep memory footprint to a minimum.
+  # keep memory footprint to a minimum. If the destination directory doesn't
+  # exist, it creates it.
   #
   # * sourceFilePath - A {String} representing the file path you want to copy.
   # * destinationFilePath - A {String} representing the file path where the file will be copied.
   # * bufferSize - An {Integer} representing the size in bytes of the buffer
   #   when reading from and writing to disk. The default is 16KB.
   copyFileSync: (sourceFilePath, destinationFilePath, bufferSize=16 * 1024) ->
+    mkdirp.sync(path.dirname(destinationFilePath))
+
     readFd = null
     writeFd = null
     try
