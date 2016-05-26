@@ -324,11 +324,13 @@ fsPlus =
     try
       readFd = fs.openSync(sourceFilePath, 'r')
       writeFd = fs.openSync(destinationFilePath, 'w')
-      loop
+      bytesRead = 1
+      position = 0
+      while bytesRead > 0
         buffer = new Buffer(bufferSize)
-        bytesRead = fs.readSync(readFd, buffer, 0, buffer.length)
-        fs.writeSync(writeFd, buffer, 0, bytesRead)
-        break if bytesRead < buffer.length
+        bytesRead = fs.readSync(readFd, buffer, 0, buffer.length, position)
+        fs.writeSync(writeFd, buffer, 0, bytesRead, position)
+        position += bytesRead
     finally
       fs.closeSync(readFd) if readFd?
       fs.closeSync(writeFd) if writeFd?
