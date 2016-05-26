@@ -416,6 +416,16 @@ describe "fs", ->
           expect(fs.isDirectorySync(path.join(destination, path.basename(source), 'b'))).toBeTruthy()
           expect(fs.isDirectorySync(path.join(destination, path.basename(source), path.basename(source)))).toBeFalsy()
 
+  describe ".copyFileSync(sourceFilePath, destinationFilePath)", ->
+    it "copies the specified file", ->
+      sourceFilePath = temp.path()
+      destinationFilePath = temp.path()
+      content = ''
+      content += 'ABCDE' for i in [0...20000] by 1
+      fs.writeFileSync(sourceFilePath, content)
+      fs.copyFileSync(sourceFilePath, destinationFilePath)
+      expect(fs.readFileSync(destinationFilePath, 'utf8')).toBe(fs.readFileSync(sourceFilePath, 'utf8'))
+
   describe ".isCaseSensitive()/isCaseInsensitive()", ->
     it "does not return the same value for both", ->
       expect(fs.isCaseInsensitive()).not.toBe fs.isCaseSensitive()
@@ -646,7 +656,7 @@ describe "fs", ->
 
     it 'returns false for non-binary file extension', ->
       expect(fs.isBinaryExtension('.bz2')).toBe false
-    
+
     it 'returns true for an uppercase binary file extension', ->
       expect(fs.isBinaryExtension('.EXE')).toBe true
 
@@ -670,7 +680,7 @@ describe "fs", ->
 
     it 'returns false for non-Markdown file extension', ->
       expect(fs.isMarkdownExtension('.bz2')).toBe false
-    
+
     it 'returns true for a recognised Markdown file extension with unusual capitalisation', ->
       expect(fs.isMarkdownExtension('.MaRKdOwN')).toBe true
 
@@ -680,7 +690,7 @@ describe "fs", ->
 
     it 'returns false for non-PDF file extension', ->
       expect(fs.isPdfExtension('.bz2')).toBe false
-    
+
     it 'returns true for an uppercase PDF file extension', ->
       expect(fs.isPdfExtension('.PDF')).toBe true
 
