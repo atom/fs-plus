@@ -6,6 +6,11 @@ temp.track()
 
 describe "fs", ->
   fixturesDir = path.join(__dirname, 'fixtures')
+  sampleFile = path.join(fixturesDir,  'sample.js')
+  linkToSampleFile = path.join(fixturesDir,  'link-to-sample.js')
+  try
+    fs.unlinkSync(linkToSampleFile)
+  fs.symlinkSync(sampleFile, linkToSampleFile, 'junction')
 
   describe ".isFileSync(path)", ->
     it "returns true with a file path", ->
@@ -20,10 +25,10 @@ describe "fs", ->
 
   describe ".isSymbolicLinkSync(path)", ->
     it "returns true with a symbolic link path", ->
-      expect(fs.isSymbolicLinkSync(path.join(fixturesDir,  'link-to-sample.js'))).toBe true
+      expect(fs.isSymbolicLinkSync(linkToSampleFile)).toBe true
 
     it "returns false with a file path", ->
-      expect(fs.isSymbolicLinkSync(path.join(fixturesDir,  'sample.js'))).toBe false
+      expect(fs.isSymbolicLinkSync(sampleFile)).toBe false
 
     it "returns false with a non-existent path", ->
       expect(fs.isSymbolicLinkSync(path.join(fixturesDir, 'non-existent'))).toBe false
@@ -33,13 +38,13 @@ describe "fs", ->
   describe ".isSymbolicLink(path, callback)", ->
     it "calls back with true for a symbolic link path", ->
       callback = jasmine.createSpy('isSymbolicLink')
-      fs.isSymbolicLink(path.join(fixturesDir,  'link-to-sample.js'), callback)
+      fs.isSymbolicLink(linkToSampleFile, callback)
       waitsFor -> callback.callCount is 1
       runs -> expect(callback.mostRecentCall.args[0]).toBe true
 
     it "calls back with false for a file path", ->
       callback = jasmine.createSpy('isSymbolicLink')
-      fs.isSymbolicLink(path.join(fixturesDir,  'sample.js'), callback)
+      fs.isSymbolicLink(sampleFile, callback)
       waitsFor -> callback.callCount is 1
       runs -> expect(callback.mostRecentCall.args[0]).toBe false
 
@@ -230,16 +235,17 @@ describe "fs", ->
       expect(symlinkPaths).toEqual(paths)
 
     it "ignores missing symlinks", ->
-      directory = temp.mkdirSync('symlink-in-here')
-      paths = []
-      onPath = (childPath) -> paths.push(childPath)
-      fs.symlinkSync(path.join(directory, 'source'), path.join(directory, 'destination'))
-      fs.traverseTreeSync(directory, onPath)
-      expect(paths.length).toBe 0
+      unless process.platform is 'win32' # Dir symlinks on Windows require admin
+        directory = temp.mkdirSync('symlink-in-here')
+        paths = []
+        onPath = (childPath) -> paths.push(childPath)
+        fs.symlinkSync(path.join(directory, 'source'), path.join(directory, 'destination'))
+        fs.traverseTreeSync(directory, onPath)
+        expect(paths.length).toBe 0
 
   describe ".md5ForPath(path)", ->
     it "returns the MD5 hash of the file at the given path", ->
-      expect(fs.md5ForPath(require.resolve('./fixtures/sample.js'))).toBe 'dd38087d0d7e3e4802a6d3f9b9745f2b'
+      expect(fs.md5ForPath(require.resolve('./fixtures/binary-file.png'))).toBe 'cdaad7483b17865b5f00728d189e90eb'
 
   describe ".list(path, extensions)", ->
     it "returns the absolute paths of entries within the given directory", ->
@@ -318,15 +324,19 @@ describe "fs", ->
 
   describe ".getAppDataDirectory", ->
     originalPlatform = null
+    originalHome = null
 
     beforeEach ->
       originalPlatform = process.platform
+      originalHome = process.env.HOME
 
     afterEach ->
       Object.defineProperty process, 'platform', value: originalPlatform
+      Object.defineProperty process.env, 'HOME', value: originalHome
 
     it "returns a Application Support path on Mac", ->
       Object.defineProperty process, 'platform', value: 'darwin'
+      Object.defineProperty process.env, 'HOME', value: path.join(path.sep, 'Users', 'Buzz') unless originalPlatform is 'darwin'
       expect(fs.getAppDataDirectory()).toBe path.join(process.env.HOME, 'Library', 'Application Support')
 
     it "returns %AppData% on Windows", ->
@@ -348,8 +358,7 @@ describe "fs", ->
       expect(fs.getSizeSync()).toBe -1
       expect(fs.getSizeSync('')).toBe -1
       expect(fs.getSizeSync(null)).toBe -1
-      expect(fs.getSizeSync(fixturesDir)).toBeGreaterThan 0
-      expect(fs.getSizeSync(path.join(fixturesDir, 'sample.js'))).toBe 408
+      expect(fs.getSizeSync(path.join(fixturesDir, 'binary-file.png'))).toBe 392
       expect(fs.getSizeSync(path.join(fixturesDir, 'does.not.exist'))).toBe -1
 
   describe ".writeFileSync(filePath)", ->
@@ -454,6 +463,9 @@ describe "fs", ->
 
     afterEach ->
       Object.defineProperty process, 'platform', value: originalPlatform
+
+    it "returns false when passed \\", ->
+      expect(fs.isAbsolute('\\')).toBe false
 
     it "returns true when the path is absolute, false otherwise", ->
       Object.defineProperty process, 'platform', value: 'win32'

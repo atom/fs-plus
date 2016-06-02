@@ -33,12 +33,7 @@ fsPlus =
   absolute: (relativePath) ->
     return null unless relativePath?
 
-    homeDir = fsPlus.getHomeDirectory()
-
-    if relativePath is '~'
-      relativePath = homeDir
-    else if relativePath.indexOf('~/') is 0
-      relativePath = "#{homeDir}#{relativePath.substring(1)}"
+    relativePath = fsPlus.resolveHome(relativePath)
 
     try
       fs.realpathSync(relativePath)
@@ -56,15 +51,14 @@ fsPlus =
   normalize: (pathToNormalize) ->
     return null unless pathToNormalize?
 
-    normalizedPath = path.normalize(pathToNormalize.toString())
+    fsPlus.resolveHome(path.normalize(pathToNormalize.toString()))
 
-    if home = fsPlus.getHomeDirectory()
-      if normalizedPath is '~'
-        normalizedPath = home
-      else if normalizedPath.indexOf("~#{path.sep}") is 0
-        normalizedPath = "#{home}#{normalizedPath.substring(1)}"
-
-    normalizedPath
+  resolveHome: (relativePath) ->
+    if relativePath is '~'
+      return fsPlus.getHomeDirectory()
+    else if relativePath.indexOf("~#{path.sep}") is 0
+      return "#{fsPlus.getHomeDirectory()}#{relativePath.substring(1)}"
+    return relativePath
 
   # Public: Get path to store application specific data.
   #
@@ -74,7 +68,7 @@ fsPlus =
   # Linux: /var/lib
   getAppDataDirectory: ->
     switch process.platform
-      when 'darwin' then fsPlus.absolute '~/Library/Application Support'
+      when 'darwin' then fsPlus.absolute(path.join '~', 'Library', 'Application Support')
       when 'linux'  then '/var/lib'
       when 'win32'  then process.env.APPDATA
       else null
@@ -590,6 +584,8 @@ MARKDOWN_EXTENSIONS =
   '.mkdown':   true
   '.rmd':      true
   '.ron':      true
+
+
 
 isPathValid = (pathToCheck) ->
   pathToCheck? and typeof pathToCheck is 'string' and pathToCheck.length > 0
