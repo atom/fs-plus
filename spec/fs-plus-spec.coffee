@@ -324,20 +324,18 @@ describe "fs", ->
 
   describe ".getAppDataDirectory", ->
     originalPlatform = null
-    originalHome = null
 
     beforeEach ->
       originalPlatform = process.platform
-      originalHome = process.env.HOME
 
     afterEach ->
       Object.defineProperty process, 'platform', value: originalPlatform
-      Object.defineProperty process.env, 'HOME', value: originalHome
 
-    it "returns a Application Support path on Mac", ->
+    it "returns the Application Support path on Mac", ->
       Object.defineProperty process, 'platform', value: 'darwin'
-      Object.defineProperty process.env, 'HOME', value: path.join(path.sep, 'Users', 'Buzz') unless originalPlatform is 'darwin'
-      expect(fs.getAppDataDirectory()).toBe path.join(process.env.HOME, 'Library', 'Application Support')
+      unless process.env.HOME
+        Object.defineProperty process.env, 'HOME', value: path.join(path.sep, 'Users', 'Buzz')
+      expect(fs.getAppDataDirectory()).toBe path.join(fs.getHomeDirectory(), 'Library', 'Application Support')
 
     it "returns %AppData% on Windows", ->
       Object.defineProperty process, 'platform', value: 'win32'
