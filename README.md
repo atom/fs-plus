@@ -1,4 +1,7 @@
-# fs plus [![Build Status](https://travis-ci.org/atom/fs-plus.svg?branch=master)](https://travis-ci.org/atom/fs-plus)
+# fs plus
+[![OS X Build Status](https://travis-ci.org/atom/fs-plus.svg?branch=master)](https://travis-ci.org/atom/fs-plus)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/gf2tleqp0hdek3o3/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/fs-plus/branch/master)
+[![Dependency Status](https://david-dm.org/atom/fs-plus.svg)](https://david-dm.org/atom/fs-plus)
 
 Yet another filesystem helper based on node's [fs](http://nodejs.org/api/fs.html)
 module.  This library exports everything from node's fs module but with some
