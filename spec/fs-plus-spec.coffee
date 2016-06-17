@@ -243,6 +243,86 @@ describe "fs", ->
         fs.traverseTreeSync(directory, onPath)
         expect(paths.length).toBe 0
 
+  describe ".traverseTree(path, onFile, onDirectory, onDone)", ->
+    it "calls fn for every path in the tree at the given path", ->
+      paths = []
+      onPath = (childPath) ->
+        paths.push(childPath)
+        true
+      done = false
+      onDone = ->
+        done = true
+      fs.traverseTree fixturesDir, onPath, onPath, onDone
+
+      waitsFor ->
+        done
+
+      runs ->
+        expect(paths).toEqual fs.listTreeSync(fixturesDir)
+
+    it "does not recurse into a directory if it is pruned", ->
+      paths = []
+      onPath = (childPath) ->
+        if childPath.match(/\/dir$/)
+          false
+        else
+          paths.push(childPath)
+          true
+      done = false
+      onDone = ->
+        done = true
+
+      fs.traverseTree fixturesDir, onPath, onPath, onDone
+
+      waitsFor ->
+        done
+
+      runs ->
+        expect(paths.length).toBeGreaterThan 0
+        for filePath in paths
+          expect(filePath).not.toMatch /\/dir\//
+
+    it "returns entries if path is a symlink", ->
+      symlinkPath = path.join(fixturesDir, 'symlink-to-dir')
+      symlinkPaths = []
+
+      onSymlinkPath = (path) -> symlinkPaths.push(path.substring(symlinkPath.length + 1))
+
+      regularPath = path.join(fixturesDir, 'dir')
+      paths = []
+      onPath = (path) -> paths.push(path.substring(regularPath.length + 1))
+
+      symlinkDone = false
+      onSymlinkPathDone = ->
+        symlinkDone = true
+
+      regularDone = false
+      onRegularPathDone = ->
+        regularDone = true
+
+      fs.traverseTree symlinkPath, onSymlinkPath, onSymlinkPath, onSymlinkPathDone
+      fs.traverseTree regularPath, onPath, onPath, onRegularPathDone
+
+      waitsFor ->
+        symlinkDone && regularDone
+
+      runs ->
+        expect(symlinkPaths).toEqual(paths)
+
+    it "ignores missing symlinks", ->
+      directory = temp.mkdirSync('symlink-in-here')
+      paths = []
+      onPath = (childPath) -> paths.push(childPath)
+      fs.symlinkSync(path.join(directory, 'source'), path.join(directory, 'destination'))
+      done = false
+      onDone = ->
+        done = true
+      fs.traverseTree directory, onPath, onPath, onDone
+      waitsFor ->
+        done
+      runs ->
+        expect(paths.length).toBe 0
+
   describe ".md5ForPath(path)", ->
     it "returns the MD5 hash of the file at the given path", ->
       expect(fs.md5ForPath(require.resolve('./fixtures/binary-file.png'))).toBe 'cdaad7483b17865b5f00728d189e90eb'
