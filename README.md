@@ -50,6 +50,17 @@ home directory. This method does not query the filesystem.
 #### Return
  - **String** Returns a normalized path.
 
+### `tildify(pathToTildify)`
+Convert an absolute path to tilde path for linux and mac:
+/Users/username/dev => ~/dev
+
+#### Params
+
+ - **String** `pathToTildify`: The string containing the full path.
+
+#### Return
+ - **String** Returns a tildified path.
+
 ### `getAppDataDirectory()`
 Get path to store application specific data.
 
