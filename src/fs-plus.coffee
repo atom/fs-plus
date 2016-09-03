@@ -60,6 +60,12 @@ fsPlus =
       return "#{fsPlus.getHomeDirectory()}#{relativePath.substring(1)}"
     return relativePath
 
+  tildify: (pathToTildify) ->
+    return pathToTildify if process.platform is 'win32'
+    home = fsPlus.getHomeDirectory()
+    str = path.normalize(pathToTildify.toString()) + path.sep
+    return (if str.indexOf(home) is 0 then str.replace(home + path.sep, '~' + path.sep) else str).slice(0, -1)
+
   # Public: Get path to store application specific data.
   #
   # Returns the {String} absolute path or null if platform isn't supported

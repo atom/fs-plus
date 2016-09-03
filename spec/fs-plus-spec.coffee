@@ -502,6 +502,21 @@ describe "fs", ->
       expect(fs.normalize('~')).toBe fs.getHomeDirectory()
       expect(fs.normalize('~/foo')).toBe path.join(fs.getHomeDirectory(), 'foo')
 
+  describe ".tildify(pathToTildify)", ->
+    it "tildifys the path", ->
+      home = fs.getHomeDirectory()
+      if process.platform is 'win32'
+        expect(fs.tildify(home)).toBe home
+      else
+        expect(fs.tildify(home)).toBe '~'
+        expect(fs.tildify(path.join(home, 'foo'))).toBe '~/foo'
+        fixture = path.join('foo', fs.getHomeDirectory())
+        expect(fs.tildify(fixture)).toBe fixture
+        fixture = path.resolve("#{home}foo", 'tildify')
+        expect(fs.tildify(fixture)).toBe fixture
+        expect(fs.tildify('foo')).toBe 'foo'
+
+
   describe ".move", ->
     tempDir = null
 
