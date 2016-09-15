@@ -4,6 +4,7 @@ path = require 'path'
 
 _ = require 'underscore-plus'
 async = require 'async'
+tildify = require 'tildify'
 mkdirp = require 'mkdirp'
 rimraf = require 'rimraf'
 
@@ -68,9 +69,7 @@ fsPlus =
   # Returns a tildified path {String}.
   tildify: (pathToTildify) ->
     return pathToTildify if process.platform is 'win32'
-    home = fsPlus.getHomeDirectory()
-    str = path.normalize(pathToTildify.toString()) + path.sep
-    return (if str.indexOf(home) is 0 then str.replace(home + path.sep, '~' + path.sep) else str).slice(0, -1)
+    return tildify(pathToTildify)
 
   # Public: Get path to store application specific data.
   #
