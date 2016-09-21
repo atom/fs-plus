@@ -4,6 +4,7 @@ path = require 'path'
 
 _ = require 'underscore-plus'
 async = require 'async'
+tildify = require 'tildify'
 mkdirp = require 'mkdirp'
 rimraf = require 'rimraf'
 
@@ -59,6 +60,16 @@ fsPlus =
     else if relativePath.indexOf("~#{path.sep}") is 0
       return "#{fsPlus.getHomeDirectory()}#{relativePath.substring(1)}"
     return relativePath
+
+  # Public: Convert an absolute path to tilde path for linux and mac:
+  # /Users/username/dev => ~/dev
+  #
+  # pathToTildify - The {String} containing the full path.
+  #
+  # Returns a tildified path {String}.
+  tildify: (pathToTildify) ->
+    return pathToTildify if process.platform is 'win32'
+    return tildify(pathToTildify)
 
   # Public: Get path to store application specific data.
   #
