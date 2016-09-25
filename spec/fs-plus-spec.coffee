@@ -516,6 +516,9 @@ describe "fs", ->
         expect(fs.tildify(fixture)).toBe fixture
         expect(fs.tildify('foo')).toBe 'foo'
 
+    it "should not tildify URIs", ->
+      uri = 'remote://server:123/folder/remote_file.txt'
+      expect(fs.tildify(uri)).toBe uri
 
   describe ".move", ->
     tempDir = null

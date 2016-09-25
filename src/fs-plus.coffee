@@ -1,4 +1,5 @@
 fs = require 'fs'
+url = require 'url'
 Module = require 'module'
 path = require 'path'
 
@@ -68,7 +69,8 @@ fsPlus =
   #
   # Returns a tildified path {String}.
   tildify: (pathToTildify) ->
-    return pathToTildify if process.platform is 'win32'
+    return pathToTildify if process.platform is 'win32' or
+        url.parse(pathToTildify).protocol?
     return tildify(pathToTildify)
 
   # Public: Get path to store application specific data.
