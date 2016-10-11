@@ -508,7 +508,7 @@ describe "fs", ->
 
       home = fs.getHomeDirectory()
 
-      expect(fs.tildify(home)).toBe '~' unless platform.os
+      expect(fs.tildify(home)).toBe '~'
       expect(fs.tildify(path.join(home, 'foo'))).toBe '~/foo'
       fixture = path.join('foo', home)
       expect(fs.tildify(fixture)).toBe fixture
