@@ -4,7 +4,6 @@ path = require 'path'
 
 _ = require 'underscore-plus'
 async = require 'async'
-tildify = require 'tildify'
 mkdirp = require 'mkdirp'
 rimraf = require 'rimraf'
 
@@ -61,7 +60,7 @@ fsPlus =
       return "#{fsPlus.getHomeDirectory()}#{relativePath.substring(1)}"
     return relativePath
 
-  # Public: Convert an absolute path to tilde path for linux and mac:
+  # Public: Convert an absolute path to tilde path for Linux and macOS.
   # /Users/username/dev => ~/dev
   #
   # pathToTildify - The {String} containing the full path.
@@ -69,7 +68,14 @@ fsPlus =
   # Returns a tildified path {String}.
   tildify: (pathToTildify) ->
     return pathToTildify if process.platform is 'win32'
-    return tildify(pathToTildify)
+
+    normalized = fsPlus.normalize(pathToTildify)
+    homeDir = fsPlus.getHomeDirectory()
+
+    return '~' if normalized is homeDir
+    return pathToTildify unless normalized.startsWith(path.join(homeDir, path.sep))
+
+    path.join('~', path.sep, normalized.substring(homeDir.length + 1))
 
   # Public: Get path to store application specific data.
   #
