@@ -503,69 +503,20 @@ describe "fs", ->
       expect(fs.normalize('~/foo')).toBe path.join(fs.getHomeDirectory(), 'foo')
 
   describe ".tildify(pathToTildify)", ->
-    originalPlatform = null
-    originalHome = null
-    originalSep = null
-    originalNormalize = null
-
-    beforeEach ->
-      originalPlatform = process.platform
-      originalHome = process.env.HOME
-      originalSep = path.sep
-      originalNormalize = path.normalize
-      # path.js changes per platform, mocking the above doesn't help with this function
-      Object.defineProperty path, 'normalize', value: (path) -> originalNormalize(path).replace(/\\/g, '/')
-
-    afterEach ->
-      Object.defineProperty process, 'platform', value: originalPlatform
-      Object.defineProperty process.env, 'HOME', value: originalHome
-      Object.defineProperty path, 'sep', value: originalSep
-      Object.defineProperty path, 'normalize', value: originalNormalize
-
-    it "tildifys the path on macOS", ->
-      Object.defineProperty process, 'platform', value: 'darwin'
-      Object.defineProperty process.env, 'HOME', value: '/Users/Buzz'
-      Object.defineProperty path, 'sep', value: '/'
+    it "tildifys the path on Linux and macOS", ->
+      return if process.platform is 'win32'
 
       home = fs.getHomeDirectory()
-      debugger
-      expect(fs.tildify(home)).toBe '~'
+
+      expect(fs.tildify(home)).toBe '~' unless platform.os
       expect(fs.tildify(path.join(home, 'foo'))).toBe '~/foo'
       fixture = path.join('foo', home)
       expect(fs.tildify(fixture)).toBe fixture
       fixture = path.resolve("#{home}foo", 'tildify')
       expect(fs.tildify(fixture)).toBe fixture
       expect(fs.tildify('foo')).toBe 'foo'
-
-    it "tildifys the path on Linux", ->
-      Object.defineProperty process, 'platform', value: 'linux'
-      Object.defineProperty process.env, 'HOME', value: '/home/buzz'
-      Object.defineProperty path, 'sep', value: '/'
-
-      home = fs.getHomeDirectory()
-      expect(fs.tildify(home)).toBe '~'
-      expect(fs.tildify(path.join(home, 'foo'))).toBe '~/foo'
-      fixture = path.join('foo', home)
-      expect(fs.tildify(fixture)).toBe fixture
-      fixture = path.resolve("#{home}foo", 'tildify')
-      expect(fs.tildify(fixture)).toBe fixture
-      expect(fs.tildify('foo')).toBe 'foo'
-
-    it "doesn't tildify the path on Windows", ->
-      Object.defineProperty process, 'platform', value: 'win32'
-      Object.defineProperty process.env, 'USERPROFILE', value: 'C:\\Users\\Buzz'
-      Object.defineProperty path, 'sep', value: '\\'
-
-      home = fs.getHomeDirectory()
-
-      expect(fs.tildify(home)).toBe home
-      expect(fs.tildify(path.join(home, 'foo'))).toBe path.join(home, 'foo')
 
     it "doesn't change URLs or paths not tildified", ->
-      Object.defineProperty process, 'platform', value: 'darwin'
-      Object.defineProperty process.env, 'HOME', value: '/Users/Buzz'
-      Object.defineProperty path, 'sep', value: '/'
-
       urlToLeaveAlone = "https://atom.io/something/fun?abc"
       expect(fs.tildify(urlToLeaveAlone)).toBe urlToLeaveAlone
 
