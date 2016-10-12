@@ -30,9 +30,9 @@
     "temp": "~0.8.1"
   },
   "dependencies": {
-    "async": "~0.2.9",
+    "async": "^1.5.2",
     "mkdirp": "^0.5.1",
-    "rimraf": "~2.2.2",
+    "rimraf": "^2.5.2",
     "underscore-plus": "1.x"
   }
 }
