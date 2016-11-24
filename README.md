@@ -1,5 +1,5 @@
 # fs plus
-[![OS X Build Status](https://travis-ci.org/atom/fs-plus.svg?branch=master)](https://travis-ci.org/atom/fs-plus)
+[![macOS Build Status](https://travis-ci.org/atom/fs-plus.svg?branch=master)](https://travis-ci.org/atom/fs-plus)
 [![Windows Build Status](https://ci.appveyor.com/api/projects/status/gf2tleqp0hdek3o3/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/fs-plus/branch/master)
 [![Dependency Status](https://david-dm.org/atom/fs-plus.svg)](https://david-dm.org/atom/fs-plus)
 
