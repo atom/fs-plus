@@ -473,11 +473,14 @@ fsPlus =
   # Public: Like {.resolve} but uses node's modules paths as the load paths to
   # search.
   resolveOnLoadPath: (args...) ->
-    modulePaths = module.paths ? [
-      path.join(process.resourcesPath, 'app', 'node_modules'),
-      path.join(process.resourcesPath, 'app.asar', 'node_modules'),
-      path.join(process.resourcesPath, 'node_modules')
-    ]
+    modulePaths = null
+    if module.paths?
+      modulePaths = module.paths
+    else if process.resourcesPath
+      modulePaths = [path.join(process.resourcesPath, 'app', 'node_modules')]
+    else
+      modulePaths = []
+
     loadPaths = Module.globalPaths.concat(modulePaths)
     fsPlus.resolve(loadPaths..., args...)
 
