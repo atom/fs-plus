@@ -652,4 +652,7 @@ isMoveTargetValidSync = (source, target) ->
 module.exports = new Proxy({}, {
   get: (target, key) ->
     fsPlus[key] ? fs[key]
+
+  set: (target, key, value) ->
+    fsPlus[key] = value
 })
