@@ -15,8 +15,6 @@ rimraf = require 'rimraf'
 #
 # [fs]: http://nodejs.org/api/fs.html
 fsPlus =
-  __esModule: false
-
   getHomeDirectory: ->
     if process.platform is 'win32'
       process.env.USERPROFILE
@@ -473,15 +471,7 @@ fsPlus =
   # Public: Like {.resolve} but uses node's modules paths as the load paths to
   # search.
   resolveOnLoadPath: (args...) ->
-    modulePaths = null
-    if module.paths?
-      modulePaths = module.paths
-    else if process.resourcesPath
-      modulePaths = [path.join(process.resourcesPath, 'app', 'node_modules')]
-    else
-      modulePaths = []
-
-    loadPaths = Module.globalPaths.concat(modulePaths)
+    loadPaths = Module.globalPaths.concat(module.paths)
     fsPlus.resolve(loadPaths..., args...)
 
   # Public: Finds the first file in the given path which matches the extension
@@ -551,23 +541,18 @@ fsPlus =
   # Returns `true` if case sensitive, `false` otherwise.
   isCaseSensitive: -> not fsPlus.isCaseInsensitive()
 
-statSyncNoException = (args...) ->
-  if fs.statSyncNoException
-    fs.statSyncNoException(args...)
-  else
-    try
-      fs.statSync(args...)
-    catch error
-      false
+{statSyncNoException, lstatSyncNoException} = fs
+statSyncNoException ?= (args...) ->
+  try
+    fs.statSync(args...)
+  catch error
+    false
 
-lstatSyncNoException = (args...) ->
-  if fs.lstatSyncNoException
-    fs.lstatSyncNoException(args...)
-  else
-    try
-      fs.lstatSync(args...)
-    catch error
-      false
+lstatSyncNoException ?= (args...) ->
+  try
+    fs.lstatSync(args...)
+  catch error
+    false
 
 BINARY_EXTENSIONS =
   '.ds_store': true
@@ -618,6 +603,8 @@ MARKDOWN_EXTENSIONS =
   '.rmd':      true
   '.ron':      true
 
+
+
 isPathValid = (pathToCheck) ->
   pathToCheck? and typeof pathToCheck is 'string' and pathToCheck.length > 0
 
@@ -652,10 +639,4 @@ isMoveTargetValidSync = (source, target) ->
     oldStat.dev is newStat.dev and
     oldStat.ino is newStat.ino
 
-module.exports = new Proxy({}, {
-  get: (target, key) ->
-    fsPlus[key] ? fs[key]
-
-  set: (target, key, value) ->
-    fsPlus[key] = value
-})
+module.exports = _.extend({}, fs, fsPlus)
