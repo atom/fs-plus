@@ -663,6 +663,14 @@ describe "fs", ->
       expect(fs.normalize('~/foo')).toBe path.join(fs.getHomeDirectory(), 'foo')
 
   describe ".tildify(pathToTildify)", ->
+    getHomeDirectory = null
+
+    beforeEach ->
+      getHomeDirectory = fs.getHomeDirectory
+
+    afterEach ->
+      fs.getHomeDirectory = getHomeDirectory
+
     it "tildifys the path on Linux and macOS", ->
       return if process.platform is 'win32'
 
@@ -675,6 +683,15 @@ describe "fs", ->
       fixture = path.resolve("#{home}foo", 'tildify')
       expect(fs.tildify(fixture)).toBe fixture
       expect(fs.tildify('foo')).toBe 'foo'
+
+    it "does not tildify if home is unset", ->
+      return if process.platform is 'win32'
+
+      home = fs.getHomeDirectory()
+      fs.getHomeDirectory = -> return undefined
+
+      fixture = path.join(home, 'foo')
+      expect(fs.tildify(fixture)).toBe fixture
 
     it "doesn't change URLs or paths not tildified", ->
       urlToLeaveAlone = "https://atom.io/something/fun?abc"
