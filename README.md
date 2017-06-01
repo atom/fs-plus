@@ -51,7 +51,7 @@ home directory. This method does not query the filesystem.
  - **String** Returns a normalized path.
 
 ### `tildify(pathToTildify)`
-Convert an absolute path to tilde path for linux and mac:
+Convert an absolute path to tilde path on Linux and macOS:
 /Users/username/dev => ~/dev
 
 #### Params
@@ -67,8 +67,8 @@ Get path to store application specific data.
 #### Return
  - **String** Returns the absolute path or null if platform isn't supported
 
-    - Mac: `~/Library/Application Support/`
-    - Win: `%AppData%`
+    - macOS: `~/Library/Application Support/`
+    - Windows: `%AppData%`
     - Linux: `/var/lib`
 
 ### `isAbsolute(pathToCheck)`

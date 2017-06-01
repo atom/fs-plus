@@ -73,6 +73,7 @@ fsPlus =
 
     normalized = fsPlus.normalize(pathToTildify)
     homeDir = fsPlus.getHomeDirectory()
+    return pathToTildify unless homeDir?
 
     return '~' if normalized is homeDir
     return pathToTildify unless normalized.startsWith(path.join(homeDir, path.sep))
