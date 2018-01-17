@@ -18,7 +18,7 @@ fsPlus =
   __esModule: false
 
   getHomeDirectory: ->
-    if process.platform is 'win32'
+    if process.platform is 'win32' and not process.env.HOME
       process.env.USERPROFILE
     else
       process.env.HOME
