@@ -233,3 +233,11 @@ Returns `true` if case insensitive, `false` otherwise.
 ### `isCaseSensitive()`
 Is the filesystem case sensitive?
 Returns `true` if case sensitive, `false` otherwise.
+
+### `statSyncNoException(path[, options])`
+Calls [`fs.statSync`](https://nodejs.org/docs/latest-v10.x/api/fs.html#fs_fs_statsync_path_options), catching all exceptions raised. This method calls `fs.statSyncNoException` when provided by the underlying `fs` module (Electron < 3.0).
+Returns `fs.Stats` if the file exists, `undefined` otherwise.
+
+### `lstatSyncNoException(path[, options])`
+Calls [`fs.lstatSync`](https://nodejs.org/docs/latest-v10.x/api/fs.html#fs_fs_lstatsync_path_options), catching all exceptions raised. This method calls `fs.lstatSyncNoException` when provided by the underlying `fs` module (Electron < 3.0).
+Returns `fs.Stats` if the file exists, `undefined` otherwise.
