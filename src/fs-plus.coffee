@@ -552,8 +552,30 @@ fsPlus =
   # Returns `true` if case sensitive, `false` otherwise.
   isCaseSensitive: -> not fsPlus.isCaseInsensitive()
 
+  # Public: Calls `fs.statSync`, catching all exceptions raised. This
+  # method calls `fs.statSyncNoException` when provided by the underlying
+  # `fs` module (Electron < 3.0).
+  #
+  # Returns `fs.Stats` if the file exists, `undefined` otherwise.
+  statSyncNoException: (args...) ->
+    statSyncNoException(args...)
+
+  # Public: Calls `fs.lstatSync`, catching all exceptions raised.  This
+  # method calls `fs.statSyncNoException` when provided by the underlying
+  # `fs` module (Electron < 3.0).
+  #
+  # Returns `fs.Stats` if the file exists, `undefined` otherwise.
+  lstatSyncNoException: (args...) ->
+    lstatSyncNoException(args...)
+
+# Built-in [l]statSyncNoException methods are only provided in
+# Electron releases before 3.0.
+isElectron3OrHigher =
+  process.versions.electron &&
+  parseInt(process.versions.electron.split('.')[0]) >= 3
+
 statSyncNoException = (args...) ->
-  if fs.statSyncNoException
+  if fs.statSyncNoException and !isElectron3OrHigher
     fs.statSyncNoException(args...)
   else
     try
@@ -562,7 +584,7 @@ statSyncNoException = (args...) ->
       false
 
 lstatSyncNoException = (args...) ->
-  if fs.lstatSyncNoException
+  if fs.lstatSyncNoException and !isElectron3OrHigher
     fs.lstatSyncNoException(args...)
   else
     try
