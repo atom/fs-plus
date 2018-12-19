@@ -556,7 +556,7 @@ fsPlus =
   # method calls `fs.statSyncNoException` when provided by the underlying
   # `fs` module (Electron < 3.0).
   #
-  # Returns `fs.Stats` if the file exists, `undefined` otherwise.
+  # Returns `fs.Stats` if the file exists, `false` otherwise.
   statSyncNoException: (args...) ->
     statSyncNoException(args...)
 
@@ -564,18 +564,23 @@ fsPlus =
   # method calls `fs.lstatSyncNoException` when provided by the underlying
   # `fs` module (Electron < 3.0).
   #
-  # Returns `fs.Stats` if the file exists, `undefined` otherwise.
+  # Returns `fs.Stats` if the file exists, `false` otherwise.
   lstatSyncNoException: (args...) ->
     lstatSyncNoException(args...)
 
-# Built-in [l]statSyncNoException methods are only provided in
-# Electron releases before 3.0.
-isElectron3OrHigher =
-  process.versions.electron &&
-  parseInt(process.versions.electron.split('.')[0]) >= 3
+# Built-in [l]statSyncNoException methods are only provided in Electron releases
+# before 3.0.  We delay the version check until first request so that Electron
+# application snapshots can be generated successfully.
+isElectron2OrLower = null
+checkIfElectron2OrLower = ->
+  if isElectron2OrLower is null
+    isElectron2OrLower =
+      process.versions.electron &&
+      parseInt(process.versions.electron.split('.')[0]) <= 2
+  return isElectron2OrLower
 
 statSyncNoException = (args...) ->
-  if fs.statSyncNoException and !isElectron3OrHigher
+  if fs.statSyncNoException and checkIfElectron2OrLower()
     fs.statSyncNoException(args...)
   else
     try
@@ -584,7 +589,7 @@ statSyncNoException = (args...) ->
       false
 
 lstatSyncNoException = (args...) ->
-  if fs.lstatSyncNoException and !isElectron3OrHigher
+  if fs.lstatSyncNoException and checkIfElectron2OrLower()
     fs.lstatSyncNoException(args...)
   else
     try

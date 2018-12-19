@@ -236,8 +236,8 @@ Returns `true` if case sensitive, `false` otherwise.
 
 ### `statSyncNoException(path[, options])`
 Calls [`fs.statSync`](https://nodejs.org/docs/latest-v10.x/api/fs.html#fs_fs_statsync_path_options), catching all exceptions raised. This method calls `fs.statSyncNoException` when provided by the underlying `fs` module (Electron < 3.0).
-Returns `fs.Stats` if the file exists, `undefined` otherwise.
+Returns `fs.Stats` if the file exists, `false` otherwise.
 
 ### `lstatSyncNoException(path[, options])`
 Calls [`fs.lstatSync`](https://nodejs.org/docs/latest-v10.x/api/fs.html#fs_fs_lstatsync_path_options), catching all exceptions raised. This method calls `fs.lstatSyncNoException` when provided by the underlying `fs` module (Electron < 3.0).
-Returns `fs.Stats` if the file exists, `undefined` otherwise.
+Returns `fs.Stats` if the file exists, `false` otherwise.
