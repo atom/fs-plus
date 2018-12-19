@@ -573,7 +573,7 @@ fsPlus =
 # application snapshots can be generated successfully.
 isElectron2OrLower = null
 checkIfElectron2OrLower = ->
-  if isElectron2OrLower == null
+  if isElectron2OrLower is null
     isElectron2OrLower =
       process.versions.electron &&
       parseInt(process.versions.electron.split('.')[0]) <= 2
