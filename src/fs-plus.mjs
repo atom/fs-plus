@@ -342,7 +342,7 @@ var fsPlus = {
   // It also creates the necessary parent directories.
   writeFileSync(filePath, content, options) {
     mkdirp.sync(path.dirname(filePath));
-    return fs.writeFileSync(filePath, content, options);
+    fs.writeFileSync(filePath, content, options);
   },
 
   // Public: Open, write, flush, and close a file, writing the given content
