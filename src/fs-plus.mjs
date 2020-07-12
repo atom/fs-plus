@@ -271,7 +271,7 @@ var fsPlus = {
   // Return an {Array} of {String}s under the given path.
   listTreeSync(rootPath) {
     const paths = [];
-    const onPath = function(childPath) {
+    const onPath = (childPath) => {
       paths.push(childPath);
       return true;
     };
