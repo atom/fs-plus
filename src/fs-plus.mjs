@@ -161,9 +161,11 @@ var fsPlus = {
 
   // Public: Returns true if the specified path exists and is a file.
   isFileSync(filePath) {
-    let stat;
-    if (!isPathValid(filePath)) { return false; }
-    if ((stat = statSyncNoException(filePath))) {
+    if (!isPathValid(filePath)) {
+      return false;
+    }
+    const stat = statSyncNoException(filePath)
+    if (stat) {
       return stat.isFile();
     } else {
       return false;
