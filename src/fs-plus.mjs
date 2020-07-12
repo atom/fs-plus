@@ -307,7 +307,7 @@ var fsPlus = {
             return;
           }
 
-          return fs.rename(source, target, callback);
+          fs.rename(source, target, callback);
         });
       });
     });
