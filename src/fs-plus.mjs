@@ -690,7 +690,7 @@ var fsPlus = {
   //
   // Returns `fs.Stats` if the file exists, `false` otherwise.
   statSyncNoException(...args) {
-    return statSyncNoException(...Array.from(args || []));
+    return statSyncNoException(...args);
   },
 
   // Public: Calls `fs.lstatSync`, catching all exceptions raised.  This
