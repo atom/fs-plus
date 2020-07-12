@@ -716,12 +716,12 @@ const checkIfElectron2OrLower = function() {
   return isElectron2OrLower;
 };
 
-var statSyncNoException = function(...args) {
+let statSyncNoException = function(...args) {
   if (fs.statSyncNoException && checkIfElectron2OrLower()) {
-    return fs.statSyncNoException(...Array.from(args || []));
+    return fs.statSyncNoException(...args);
   } else {
     try {
-      return fs.statSync(...Array.from(args || []));
+      return fs.statSync(...args);
     } catch (error) {
       return false;
     }
