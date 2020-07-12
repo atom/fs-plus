@@ -1,15 +1,6 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS104: Avoid inline assignments
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-const fs = require('fs');
-const Module = require('module');
-const path = require('path');
+import fs from 'fs';
+import Module from 'module';
+import path from 'path';
 
 const _ = require('underscore-plus');
 const async = require('async');
