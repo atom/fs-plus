@@ -281,7 +281,7 @@ var fsPlus = {
 
   // Public: Moves the source file or directory to the target asynchronously.
   move(source, target, callback) {
-    return isMoveTargetValid(source, target, function(isMoveTargetValidErr, isTargetValid) {
+    return isMoveTargetValid(source, target, (isMoveTargetValidErr, isTargetValid) => {
       if (isMoveTargetValidErr) {
         callback(isMoveTargetValidErr);
         return;
@@ -295,13 +295,13 @@ var fsPlus = {
       }
 
       const targetParentPath = path.dirname(target);
-      return fs.exists(targetParentPath, function(targetParentExists) {
+      return fs.exists(targetParentPath, (targetParentExists) => {
         if (targetParentExists) {
           fs.rename(source, target, callback);
           return;
         }
 
-        return fsPlus.makeTree(targetParentPath, function(makeTreeErr) {
+        return fsPlus.makeTree(targetParentPath, (makeTreeErr) => {
           if (makeTreeErr) {
             callback(makeTreeErr);
             return;
