@@ -254,7 +254,7 @@ var fsPlus = {
 
   // Returns only the paths which end with one of the given extensions.
   filterExtensions(paths, extensions) {
-    extensions = extensions.map(function(ext) {
+    extensions = extensions.map( (ext) => {
       if (ext === '') {
         return ext;
       } else {
