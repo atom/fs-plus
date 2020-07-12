@@ -740,7 +740,7 @@ let lstatSyncNoException = function(...args) {
   }
 };
 
-var BINARY_EXTENSIONS = {
+const BINARY_EXTENSIONS = {
   '.ds_store': true,
   '.a':        true,
   '.exe':      true,
@@ -751,7 +751,7 @@ var BINARY_EXTENSIONS = {
   '.woff':     true
 };
 
-var COMPRESSED_EXTENSIONS = {
+const COMPRESSED_EXTENSIONS = {
   '.bz2':  true,
   '.egg':  true,
   '.epub': true,
@@ -772,7 +772,7 @@ var COMPRESSED_EXTENSIONS = {
   '.zip':  true
 };
 
-var IMAGE_EXTENSIONS = {
+const IMAGE_EXTENSIONS = {
   '.gif':  true,
   '.ico':  true,
   '.jpeg': true,
@@ -783,7 +783,7 @@ var IMAGE_EXTENSIONS = {
   '.webp': true
 };
 
-var MARKDOWN_EXTENSIONS = {
+const MARKDOWN_EXTENSIONS = {
   '.markdown': true,
   '.md':       true,
   '.mdown':    true,
