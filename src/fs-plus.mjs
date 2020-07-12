@@ -425,16 +425,12 @@ var fsPlus = {
       writeFd = fs.openSync(destinationFilePath, 'w');
       let bytesRead = 1;
       let position = 0;
-      return (() => {
-        const result = [];
-        while (bytesRead > 0) {
-          const buffer = new Buffer(bufferSize);
-          bytesRead = fs.readSync(readFd, buffer, 0, buffer.length, position);
-          fs.writeSync(writeFd, buffer, 0, bytesRead, position);
-          result.push(position += bytesRead);
-        }
-        return result;
-      })();
+      while (bytesRead > 0) {
+        const buffer = new Buffer(bufferSize);
+        bytesRead = fs.readSync(readFd, buffer, 0, buffer.length, position);
+        fs.writeSync(writeFd, buffer, 0, bytesRead, position);
+        position += bytesRead;
+      }
     } finally {
       if (readFd != null) { fs.closeSync(readFd); }
       if (writeFd != null) { fs.closeSync(writeFd); }
