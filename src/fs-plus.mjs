@@ -23,7 +23,7 @@ const rimraf = require('rimraf');
 // functions that we've found to be helpful.
 //
 // [fs]: http://nodejs.org/api/fs.html
-var fsPlus = {
+const fsPlus = {
   __esModule: false,
 
   getHomeDirectory() {
