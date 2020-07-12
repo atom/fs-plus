@@ -602,7 +602,7 @@ var fsPlus = {
     }
 
     const loadPaths = Module.globalPaths.concat(modulePaths);
-    return fsPlus.resolve(...Array.from(loadPaths), ...Array.from(args));
+    return fsPlus.resolve(...loadPaths, ...args);
   },
 
   // Public: Finds the first file in the given path which matches the extension
