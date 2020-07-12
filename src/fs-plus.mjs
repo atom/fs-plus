@@ -136,9 +136,11 @@ var fsPlus = {
 
   // Public: Returns true if the given path exists and is a directory.
   isDirectorySync(directoryPath) {
-    let stat;
-    if (!isPathValid(directoryPath)) { return false; }
-    if ((stat = statSyncNoException(directoryPath))) {
+    if (!isPathValid(directoryPath)) {
+      return false;
+    }
+    const stat = statSyncNoException(directoryPath)
+    if (stat) {
       return stat.isDirectory();
     } else {
       return false;
