@@ -240,7 +240,7 @@ var fsPlus = {
     let extensions;
     if (rest.length > 1) { extensions = rest.shift(); }
     const done = rest.shift();
-    return fs.readdir(rootPath, function(error, paths) {
+    return fs.readdir(rootPath, (error, paths) => {
       if (error != null) {
         return done(error);
       } else {
