@@ -728,12 +728,12 @@ let statSyncNoException = function(...args) {
   }
 };
 
-var lstatSyncNoException = function(...args) {
+let lstatSyncNoException = function(...args) {
   if (fs.lstatSyncNoException && checkIfElectron2OrLower()) {
-    return fs.lstatSyncNoException(...Array.from(args || []));
+    return fs.lstatSyncNoException(...args);
   } else {
     try {
-      return fs.lstatSync(...Array.from(args || []));
+      return fs.lstatSync(...args);
     } catch (error) {
       return false;
     }
