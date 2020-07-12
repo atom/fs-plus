@@ -820,7 +820,7 @@ let isMoveTargetValid = function(source, target, callback) {
   });
 }
 
-var isMoveTargetValidSync = function(source, target) {
+let isMoveTargetValidSync = function(source, target) {
   const oldStat = statSyncNoException(source);
   const newStat = statSyncNoException(target);
 
