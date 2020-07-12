@@ -362,25 +362,25 @@ var fsPlus = {
 
   // Public: Copies the given path asynchronously.
   copy(sourcePath, destinationPath, done) {
-    return mkdirp(path.dirname(destinationPath), function(error) {
+    mkdirp(path.dirname(destinationPath), (error) => {
       if (error != null) {
         done?.(error);
         return;
       }
 
       const sourceStream = fs.createReadStream(sourcePath);
-      sourceStream.on('error', function(error) {
+      sourceStream.on('error', (error) => {
         done?.(error);
         return done = null;
       });
 
       const destinationStream = fs.createWriteStream(destinationPath);
-      destinationStream.on('error', function(error) {
+      destinationStream.on('error', (error) => {
         done?.(error);
         return done = null;
       });
-      destinationStream.on('close', function() {
-        done?.();
+      destinationStream.on('close', () => {
+        done?.()
         return done = null;
       });
 
