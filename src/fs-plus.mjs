@@ -446,9 +446,9 @@ var fsPlus = {
   // Public: Create a directory at the specified path including any missing
   // parent directories asynchronously.
   makeTree(directoryPath, callback) {
-    return fsPlus.isDirectory(directoryPath, function(exists) {
+    fsPlus.isDirectory(directoryPath, (exists) => {
       if (exists) { return callback?.(); }
-      return mkdirp(directoryPath, error => callback?.(error));
+      mkdirp(directoryPath, error => callback?.(error));
     });
   },
 
