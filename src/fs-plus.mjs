@@ -174,9 +174,11 @@ var fsPlus = {
 
   // Public: Returns true if the specified path is a symbolic link.
   isSymbolicLinkSync(symlinkPath) {
-    let stat;
-    if (!isPathValid(symlinkPath)) { return false; }
-    if ((stat = lstatSyncNoException(symlinkPath))) {
+    if (!isPathValid(symlinkPath)) {
+      return false;
+    }
+    const stat = lstatSyncNoException(symlinkPath)
+    if (stat) {
       return stat.isSymbolicLink();
     } else {
       return false;
