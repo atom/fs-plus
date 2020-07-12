@@ -797,26 +797,28 @@ let isPathValid = function(pathToCheck) {
   return (pathToCheck != null) && (typeof pathToCheck === 'string') && (pathToCheck.length > 0);
 }
 
-var isMoveTargetValid = (source, target, callback) => fs.stat(source, function(oldErr, oldStat) {
-  if (oldErr) {
-    callback(oldErr);
-    return;
-  }
-
-  return fs.stat(target, function(newErr, newStat) {
-    if (newErr && (newErr.code === 'ENOENT')) {
-      callback(undefined, true); // new path does not exist so it is valid
+let isMoveTargetValid = function(source, target, callback) {
+  return fs.stat(source, (oldErr, oldStat) => {
+    if (oldErr) {
+      callback(oldErr);
       return;
     }
 
-    // New path exists so check if it points to the same file as the initial
-    // path to see if the case of the file name is being changed on a case
-    // insensitive filesystem.
-    return callback(undefined, (source.toLowerCase() === target.toLowerCase()) &&
-      (oldStat.dev === newStat.dev) &&
-      (oldStat.ino === newStat.ino));
+    return fs.stat(target, (newErr, newStat) => {
+      if (newErr && (newErr.code === 'ENOENT')) {
+        callback(undefined, true); // new path does not exist so it is valid
+        return;
+      }
+
+      // New path exists so check if it points to the same file as the initial
+      // path to see if the case of the file name is being changed on a case
+      // insensitive filesystem.
+      return callback(undefined, (source.toLowerCase() === target.toLowerCase()) &&
+          (oldStat.dev === newStat.dev) &&
+          (oldStat.ino === newStat.ino));
+    });
   });
-});
+}
 
 var isMoveTargetValidSync = function(source, target) {
   const oldStat = statSyncNoException(source);
