@@ -498,43 +498,42 @@ var fsPlus = {
   // onDirectory - The {Function} to execute on each directory, receives a single
   //               argument the absolute path (defaults to onFile).
   traverseTree(rootPath, onFile, onDirectory, onDone) {
-    return fs.readdir(rootPath, function(error, files) {
+    return fs.readdir(rootPath, (error, files) => {
       if (error) {
-        return onDone?.();
+        return onDone?.()
       } else {
-        var queue = async.queue((childPath, callback) => fs.stat(childPath, function(error, stats) {
-          if (error) {
-            return callback(error);
-          } else if (stats.isFile()) {
-            onFile(childPath);
-            return callback();
-          } else if (stats.isDirectory()) {
-            if (onDirectory(childPath)) {
-              return fs.readdir(childPath, function(error, files) {
-                if (error) {
-                  return callback(error);
-                } else {
-                  for (let file of Array.from(files)) {
-                    queue.unshift(path.join(childPath, file));
+        let queue = async.queue((childPath, callback) =>
+          fs.stat(childPath, (error, stats) => {
+            if (error) {
+              return callback(error);
+            } else if (stats.isFile()) {
+              onFile(childPath);
+              return callback();
+            } else if (stats.isDirectory()) {
+              if (onDirectory(childPath)) {
+                return fs.readdir(childPath, (error, files) => {
+                  if (error) {
+                    return callback(error);
+                  } else {
+                    for (let file of files) {
+                      queue.unshift(path.join(childPath, file));
+                    }
+                    return callback();
                   }
-                  return callback();
-                }
-              });
+                });
+              } else {
+                return callback();
+              }
             } else {
               return callback();
             }
-          } else {
-            return callback();
-          }
-        }));
+          })
+        );
         queue.concurrency = 1;
         queue.drain = onDone;
-        return (() => {
-          const result = [];
-          for (let file of Array.from(files)) {             result.push(queue.push(path.join(rootPath, file)));
-          }
-          return result;
-        })();
+        for (let file of files) {
+          queue.push(path.join(rootPath, file));
+        }
       }
     });
   },
