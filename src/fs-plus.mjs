@@ -394,20 +394,16 @@ var fsPlus = {
     // infinitely creating copies of the directory when copying inside itself
     const sources = fs.readdirSync(sourcePath);
     mkdirp.sync(destinationPath);
-    return (() => {
-      const result = [];
-      for (let source of Array.from(sources)) {
+      for (let source of sources) {
         const sourceFilePath = path.join(sourcePath, source);
         const destinationFilePath = path.join(destinationPath, source);
 
         if (fsPlus.isDirectorySync(sourceFilePath)) {
-          result.push(fsPlus.copySync(sourceFilePath, destinationFilePath));
+         fsPlus.copySync(sourceFilePath, destinationFilePath);
         } else {
-          result.push(fsPlus.copyFileSync(sourceFilePath, destinationFilePath));
+         fsPlus.copyFileSync(sourceFilePath, destinationFilePath);
         }
       }
-      return result;
-    })();
   },
 
   // Public: Copies the given path synchronously, buffering reads and writes to
