@@ -699,7 +699,7 @@ var fsPlus = {
   //
   // Returns `fs.Stats` if the file exists, `false` otherwise.
   lstatSyncNoException(...args) {
-    return lstatSyncNoException(...Array.from(args || []));
+    return lstatSyncNoException(...args);
   }
 };
 
