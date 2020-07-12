@@ -793,7 +793,9 @@ const MARKDOWN_EXTENSIONS = {
   '.ron':      true
 };
 
-var isPathValid = pathToCheck => (pathToCheck != null) && (typeof pathToCheck === 'string') && (pathToCheck.length > 0);
+let isPathValid = function(pathToCheck) {
+  return (pathToCheck != null) && (typeof pathToCheck === 'string') && (pathToCheck.length > 0);
+}
 
 var isMoveTargetValid = (source, target, callback) => fs.stat(source, function(oldErr, oldStat) {
   if (oldErr) {
