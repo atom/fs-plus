@@ -351,11 +351,11 @@ var fsPlus = {
   // It also creates the necessary parent directories.
   writeFile(filePath, content, options, callback) {
     callback = _.last(arguments);
-    return mkdirp(path.dirname(filePath), function(error) {
+    mkdirp(path.dirname(filePath), (error) => {
       if (error != null) {
-        return callback?.(error);
+        callback?.(error)
       } else {
-        return fs.writeFile(filePath, content, options, callback);
+        fs.writeFile(filePath, content, options, callback);
       }
     });
   },
