@@ -6,9 +6,9 @@
   "scripts": {
     "clean": "shx rm -rf lib",
     "test": "jasmine-focused --captureExceptions --coffee spec",
-    "babel": "npm run clean && env NODE_ENV=development env BABEL_ENV=development babel src --out-dir lib",
-    "dev": "npm run clean && env NODE_ENV=development env BABEL_ENV=production rollup -c -w",
-    "build": "npm run clean && env NODE_ENV=production env BABEL_ENV=production rollup -c ",
+    "babel": "npm run clean && cross-env NODE_ENV=development cross-env BABEL_KEEP_MODULES=false babel src --out-dir lib",
+    "dev": "npm run clean && cross-env NODE_ENV=development cross-env BABEL_KEEP_MODULES=true rollup -c -w",
+    "build": "npm run clean && cross-env NODE_ENV=production cross-env BABEL_KEEP_MODULES=true rollup -c ",
     "prepare": "npm run build"
   },
   "repository": {
@@ -36,11 +36,9 @@
     "rollup-plugin-auto-external": "^2.0.0",
     "@babel/cli": "7.10.3",
     "@babel/core": "7.10.3",
-    "@babel/plugin-proposal-export-namespace-from": "^7.10.4",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.10.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.10.4",
-    "shx": "^0.3.2"
+    "babel-preset-atomic": "^1.0.7",
+    "shx": "^0.3.2",
+    "cross-env": "^7.0.2"
   },
   "dependencies": {
     "async": "^1.5.2",
