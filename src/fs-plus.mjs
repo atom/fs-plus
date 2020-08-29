@@ -440,7 +440,7 @@ var fsPlus = {
   // Public: Create a directory at the specified path including any missing
   // parent directories synchronously.
   makeTreeSync(directoryPath) {
-    if (!fsPlus.isDirectorySync(directoryPath)) { return mkdirp.sync(directoryPath); }
+    if (!fsPlus.isDirectorySync(directoryPath)) { mkdirp.sync(directoryPath); }
   },
 
   // Public: Create a directory at the specified path including any missing
