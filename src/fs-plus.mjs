@@ -323,7 +323,7 @@ var fsPlus = {
 
     const targetParentPath = path.dirname(target);
     if (!fs.existsSync(targetParentPath)) { fsPlus.makeTreeSync(targetParentPath); }
-    return fs.renameSync(source, target);
+    fs.renameSync(source, target);
   },
 
   // Public: Removes the file or directory at the given path synchronously.
