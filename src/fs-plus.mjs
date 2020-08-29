@@ -559,13 +559,14 @@ var fsPlus = {
   // Returns the absolute path of the file to be resolved if it's found and
   // undefined otherwise.
   resolve(...args) {
-    let extensions, resolvedPath;
+    let extensions;
     if (_.isArray(_.last(args))) { extensions = args.pop(); }
     const pathToResolve = args.pop()?.toString();
     const loadPaths = args;
 
     if (!pathToResolve) { return undefined; }
 
+    let resolvedPath;
     if (fsPlus.isAbsolute(pathToResolve)) {
       if (extensions && (resolvedPath = fsPlus.resolveExtension(pathToResolve, extensions))) {
         return resolvedPath;
@@ -577,7 +578,8 @@ var fsPlus = {
     for (let loadPath of Array.from(loadPaths)) {
       const candidatePath = path.join(loadPath, pathToResolve);
       if (extensions) {
-        if (resolvedPath = fsPlus.resolveExtension(candidatePath, extensions)) {
+        resolvedPath = fsPlus.resolveExtension(candidatePath, extensions)
+        if (resolvedPath) {
           return resolvedPath;
         }
       } else {
