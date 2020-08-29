@@ -117,7 +117,7 @@ var fsPlus = {
   // pathToCheck - The relative or absolute {String} path to check.
   //
   // Returns a {Boolean}, true if the path is absolute, false otherwise.
-  isAbsolute(pathToCheck) {
+  isAbsolute(pathToCheck='') {
     if (pathToCheck == null) { pathToCheck = ''; }
     if (process.platform === 'win32') {
       if (pathToCheck[1] === ':') { return true; } // C:\ style
