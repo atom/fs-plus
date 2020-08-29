@@ -466,13 +466,13 @@ var fsPlus = {
     if (onDirectory == null) { onDirectory = onFile; }
     if (!fsPlus.isDirectorySync(rootPath)) { return; }
 
-    var traverse = function(directoryPath, onFile, onDirectory) {
-      for (let file of Array.from(fs.readdirSync(directoryPath))) {
+    const traverse = function(directoryPath, onFile, onDirectory) {
+      for (let file of fs.readdirSync(directoryPath)) {
         const childPath = path.join(directoryPath, file);
         let stats = fs.lstatSync(childPath);
         if (stats.isSymbolicLink()) {
-          var linkStats;
-          if (linkStats = statSyncNoException(childPath)) {
+          const linkStats = statSyncNoException(childPath)
+          if (linkStats) {
             stats = linkStats;
           }
         }
