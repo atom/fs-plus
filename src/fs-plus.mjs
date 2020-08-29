@@ -836,7 +836,11 @@ let isMoveTargetValidSync = function(source, target) {
 
 module.exports = new Proxy({}, {
   get(target, key) {
-    return fsPlus[key] != null ? fsPlus[key] : fs[key];
+    if (fsPlus.hasOwnProperty(key)) {
+      return fsPlus[key];
+    } else {
+      return fs[key];
+    }
   },
 
   set(target, key, value) {
