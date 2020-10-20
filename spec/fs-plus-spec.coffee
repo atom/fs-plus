@@ -1,6 +1,6 @@
 path = require 'path'
 temp = require 'temp'
-fs = require '../src/fs-plus'
+fs = require '../lib/fs-plus'
 
 temp.track()
 

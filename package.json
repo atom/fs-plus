@@ -4,8 +4,12 @@
   "description": "node's fs with more helpers",
   "main": "./lib/fs-plus.js",
   "scripts": {
-    "prepublish": "grunt prepublish",
-    "test": "grunt test"
+    "clean": "shx rm -rf lib",
+    "test": "jasmine-focused --captureExceptions --coffee spec",
+    "babel": "npm run clean && cross-env NODE_ENV=development cross-env BABEL_KEEP_MODULES=false babel src --out-dir lib",
+    "dev": "npm run clean && cross-env NODE_ENV=development cross-env BABEL_KEEP_MODULES=true rollup -c -w",
+    "build": "npm run clean && cross-env NODE_ENV=production cross-env BABEL_KEEP_MODULES=true rollup -c ",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -22,17 +26,28 @@
   ],
   "devDependencies": {
     "jasmine-focused": "1.x",
-    "grunt-contrib-coffee": "~0.9.0",
-    "grunt-cli": "~0.1.8",
-    "grunt": "~0.4.1",
-    "grunt-shell": "~0.2.2",
-    "grunt-coffeelint": "0.0.6",
-    "temp": "~0.8.1"
+    "temp": "~0.8.1",
+    "coffeelint": "^2.1.0",
+    "rollup": "^2.18.2",
+    "rollup-plugin-atomic": "^1.2.0",
+    "@babel/cli": "7.10.3",
+    "@babel/core": "7.10.3",
+    "babel-preset-atomic": "^1.0.7",
+    "shx": "^0.3.2",
+    "cross-env": "^7.0.2"
   },
   "dependencies": {
     "async": "^1.5.2",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.5.2",
     "underscore-plus": "1.x"
+  },
+  "coffeelintConfig": {
+    "no_empty_param_list": {
+      "level": "error"
+    },
+    "max_line_length": {
+      "level": "ignore"
+    }
   }
 }

@@ -1,12 +1,15 @@
 environment:
-  nodejs_version: "6"
+  matrix:
+    - nodejs_version: "10"
+    - nodejs_version: "12"
+    - nodejs_version: "14"
 
 platform:
   - x64
   - x86
 
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:nodejs_version $env:platform
   - npm install
 
 test_script:
