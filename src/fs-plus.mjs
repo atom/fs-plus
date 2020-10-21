@@ -1,4 +1,5 @@
 import fs from 'fs';
+import fsExtra from 'fs-extra';
 import Module from 'module';
 import path from 'path';
 
@@ -829,6 +830,8 @@ module.exports = new Proxy({}, {
   get(target, key) {
     if (fsPlus.hasOwnProperty(key)) {
       return fsPlus[key];
+    } else if (fsExtra.hasOwnProperty(key)) {
+      return fsExtra[key];
     } else {
       return fs[key];
     }
