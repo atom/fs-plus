@@ -26,15 +26,15 @@
   ],
   "devDependencies": {
     "jasmine-focused": "1.x",
-    "temp": "^0.9.1",
+    "temp": "^0.9.4",
     "coffeelint": "^2.1.0",
-    "rollup": "^2.32.0",
-    "rollup-plugin-atomic": "^1.6.2",
-    "@babel/cli": "7.12.1",
-    "@babel/core": "7.12.3",
-    "babel-preset-atomic": "^2.4.4",
-    "shx": "^0.3.2",
-    "cross-env": "^7.0.2"
+    "rollup": "^2.42.4",
+    "rollup-plugin-atomic": "^2.1.1",
+    "@babel/cli": "7.13.10",
+    "@babel/core": "7.13.10",
+    "babel-preset-atomic": "^3.0.3",
+    "shx": "^0.3.3",
+    "cross-env": "^7.0.3"
   },
   "dependencies": {
     "async": "^1.5.2",
