@@ -85,7 +85,7 @@ Returns `true` if a file or folder at the specified path exists.
 ### `isDirectorySync(directoryPath)`
 Returns `true` if the given path exists and is a directory.
 
-### `isDirectory(directoryPath)`
+### `isDirectory(directoryPath, callback)`
 Asynchronously checks that the given path exists and is a directory.
 
 ### `isFileSync(filePath)`
